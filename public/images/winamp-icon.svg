@@ -1,0 +1,45 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="256" height="256" rx="48" fill="#232323"/>
+  <g filter="url(#dropShadow)">
+    <!-- Metaliczny romb -->
+    <rect x="50" y="50" width="156" height="156" rx="24" transform="rotate(45 128 128)" fill="url(#metal)" stroke="#111" stroke-width="8"/>
+    <rect x="70" y="70" width="116" height="116" rx="12" transform="rotate(45 128 128)" fill="url(#shine)" stroke="#bbb" stroke-width="4"/>
+  </g>
+  <!-- Błyskawica Winampa -->
+  <g filter="url(#boltShadow)">
+    <polygon points="104,204 150,115 122,115 182,54 159,107 188,107 116,204" fill="url(#boltGrad)" stroke="#222" stroke-width="8" stroke-linejoin="round"/>
+    <polygon points="119,170 155,110 133,110 168,66 151,101 170,101 131,170" fill="url(#boltShine)" opacity="0.45"/>
+  </g>
+  <defs>
+    <!-- Metaliczny gradient -->
+    <linearGradient id="metal" x1="50" y1="50" x2="206" y2="206" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ececec"/>
+      <stop offset="0.25" stop-color="#bbb"/>
+      <stop offset="0.75" stop-color="#fff"/>
+      <stop offset="1" stop-color="#b6b6b6"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="70" y1="70" x2="186" y2="186" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff" stop-opacity="0.85"/>
+      <stop offset="0.8" stop-color="#e5e5e5" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#bdbdbd" stop-opacity="0.8"/>
+    </linearGradient>
+    <!-- Błyskawica gradient -->
+    <linearGradient id="boltGrad" x1="120" y1="54" x2="180" y2="204" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffe181"/>
+      <stop offset="0.3" stop-color="#ffd02a"/>
+      <stop offset="0.8" stop-color="#ff9e1b"/>
+      <stop offset="1" stop-color="#f78517"/>
+    </linearGradient>
+    <linearGradient id="boltShine" x1="140" y1="54" x2="160" y2="204" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fff" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <!-- Cienie -->
+    <filter id="dropShadow" x="0" y="0" width="256" height="256">
+      <feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#111" flood-opacity="0.45"/>
+    </filter>
+    <filter id="boltShadow" x="0" y="0" width="256" height="256">
+      <feDropShadow dx="0" dy="7" stdDeviation="5" flood-color="#222" flood-opacity="0.7"/>
+    </filter>
+  </defs>
+</svg>
