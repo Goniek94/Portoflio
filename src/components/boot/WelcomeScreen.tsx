@@ -8,21 +8,21 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onFinish }) => {
   const [fadeOut, setFadeOut] = useState(false);
 
   useEffect(() => {
-    console.log('WelcomeScreen loaded - SILENT like original Windows XP');
-    
-    // Tylko wizualny timer - BEZ MUZYKI jak w oryginalnym XP
+    console.log('WelcomeScreen loaded - transition to desktop');
+
+    // Krótszy czas wyświetlania - 2 sekundy
     const welcomeTimer = setTimeout(() => {
       console.log('WelcomeScreen finished, starting fade out...');
       setFadeOut(true);
-      
+
       // Po fade out - sygnał do rodzica
       setTimeout(() => {
         console.log('WelcomeScreen fade out completed, calling onFinish...');
         if (onFinish) {
           onFinish();
         }
-      }, 1500); // 1.5s fade out
-    }, 3000); // 3s wyświetlania (jak w XP)
+      }, 800);
+    }, 2000); // 2 sekundy wyświetlania
 
     return () => {
       clearTimeout(welcomeTimer);
@@ -30,23 +30,32 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onFinish }) => {
   }, [onFinish]);
 
   return (
-    <div 
+    <div
       className="fixed inset-0 flex items-center justify-center font-sans"
       style={{
-        background: 'radial-gradient(ellipse at center, #87ceeb 0%, #4169e1 50%, #1e3c72 100%)',
+        backgroundImage: 'url("/img/Windowsxp.jpg")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
         opacity: fadeOut ? 0 : 1,
-        transition: 'opacity 1.5s ease-out'
+        transition: 'opacity 0.8s ease-out',
       }}
     >
+      {/* Overlay dla efektu welcome screen */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(ellipse at center, rgba(135,206,235,0.9) 0%, rgba(65,105,225,0.8) 50%, rgba(30,60,114,0.9) 100%)',
+        }}
+      />
       {/* Dokładne odwzorowanie oryginalnego Windows XP Welcome Screen */}
-      <div className="flex flex-col items-center">
-        
+      <div className="flex flex-col items-center relative z-10">
         {/* Logo Windows XP - DOKŁADNIE jak w oryginale */}
         <div className="relative mb-8" style={{ width: '150px', height: '120px' }}>
           {/* Flagka Windows - 4 prostokąty z dokładnymi kolorami i kształtem XP */}
-          
+
           {/* Czerwony (lewy górny) */}
-          <div 
+          <div
             className="absolute"
             style={{
               width: '68px',
@@ -57,12 +66,12 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onFinish }) => {
               top: '15px',
               transform: 'perspective(200px) rotateY(-15deg)',
               boxShadow: '2px 2px 8px rgba(0,0,0,0.3)',
-              border: '1px solid rgba(255,255,255,0.2)'
+              border: '1px solid rgba(255,255,255,0.2)',
             }}
           ></div>
-          
+
           {/* Zielony (prawy górny) */}
-          <div 
+          <div
             className="absolute"
             style={{
               width: '68px',
@@ -73,12 +82,12 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onFinish }) => {
               top: '15px',
               transform: 'perspective(200px) rotateY(15deg)',
               boxShadow: '2px 2px 8px rgba(0,0,0,0.3)',
-              border: '1px solid rgba(255,255,255,0.2)'
+              border: '1px solid rgba(255,255,255,0.2)',
             }}
           ></div>
-          
+
           {/* Niebieski (lewy dolny) */}
-          <div 
+          <div
             className="absolute"
             style={{
               width: '68px',
@@ -89,12 +98,12 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onFinish }) => {
               top: '58px',
               transform: 'perspective(200px) rotateY(-15deg)',
               boxShadow: '2px 2px 8px rgba(0,0,0,0.3)',
-              border: '1px solid rgba(255,255,255,0.2)'
+              border: '1px solid rgba(255,255,255,0.2)',
             }}
           ></div>
-          
+
           {/* Żółty (prawy dolny) */}
-          <div 
+          <div
             className="absolute"
             style={{
               width: '68px',
@@ -105,7 +114,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onFinish }) => {
               top: '58px',
               transform: 'perspective(200px) rotateY(15deg)',
               boxShadow: '2px 2px 8px rgba(0,0,0,0.3)',
-              border: '1px solid rgba(255,255,255,0.2)'
+              border: '1px solid rgba(255,255,255,0.2)',
             }}
           ></div>
         </div>
@@ -114,35 +123,35 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onFinish }) => {
         <div className="text-center">
           {/* Microsoft - małe, delikatne */}
           <div className="mb-2">
-            <span 
+            <span
               style={{
                 fontFamily: 'Tahoma, Arial, sans-serif',
                 fontSize: '16px',
                 fontWeight: '400',
                 color: '#ffffff',
                 textShadow: '1px 1px 3px rgba(0,0,0,0.6)',
-                letterSpacing: '1px'
+                letterSpacing: '1px',
               }}
             >
               Microsoft<span style={{ fontSize: '12px', verticalAlign: 'super' }}>®</span>
             </span>
           </div>
-          
+
           {/* Windows XP - duże, charakterystyczne */}
           <div className="flex items-end justify-center">
-            <span 
+            <span
               style={{
                 fontFamily: 'Tahoma, Arial, sans-serif',
                 fontSize: '52px',
                 fontWeight: '300',
                 color: '#ffffff',
                 textShadow: '2px 2px 6px rgba(0,0,0,0.7)',
-                letterSpacing: '2px'
+                letterSpacing: '2px',
               }}
             >
               Windows
             </span>
-            <span 
+            <span
               style={{
                 fontFamily: 'Tahoma, Arial, sans-serif',
                 fontSize: '36px',
@@ -150,7 +159,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onFinish }) => {
                 color: '#ff6600',
                 textShadow: '2px 2px 6px rgba(0,0,0,0.7)',
                 marginLeft: '8px',
-                letterSpacing: '1px'
+                letterSpacing: '1px',
               }}
             >
               XP
@@ -159,20 +168,22 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onFinish }) => {
         </div>
       </div>
 
-      {/* Subtelny efekt świetlny w tle - jak w oryginale */}
-      <div 
+      {/* Subtelny efekt światlny w tle - jak w oryginale */}
+      <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,255,255,0.15) 0%, transparent 50%)',
-          mixBlendMode: 'soft-light'
+          background:
+            'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(255,255,255,0.15) 0%, transparent 50%)',
+          mixBlendMode: 'soft-light',
         }}
       ></div>
 
       {/* Delikatny vignette */}
-      <div 
+      <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0.4) 100%)'
+          background:
+            'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.1) 70%, rgba(0,0,0,0.4) 100%)',
         }}
       ></div>
     </div>

@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import DesktopIcons from '@/components/Tools/DesktopIcons';
-import Taskbar from '@/components/Desktop/Taskbar';
-import StartMenu from '@/components/Desktop/StartMenu';
+import DesktopIcons from '@/components/common/DesktopIcons';
+import Taskbar from '@/components/desktop/Taskbar';
+import StartMenu from '@/components/desktop/StartMenu';
 import WindowManager, { useWindowManager, APP_CONFIGS } from '@/components/Tools/WindowManager';
 import WinampWindow from '@/components/Applications/Winamp/WinampWindow';
 import GaduGaduWindow from '../Applications/GaduGadu/gadugaduWindow';
@@ -25,6 +25,7 @@ export default function DesktopXP({
   // UI State
   const [contextMenu, setContextMenu] = useState({ x: 0, y: 0, visible: false });
   const [showStartMenu, setShowStartMenu] = useState(false);
+  const [showWinamp, setShowWinamp] = useState(false);
 
   // Glitch timer
   const [glitchTriggered, setGlitchTriggered] = useState(false);
@@ -58,11 +59,17 @@ export default function DesktopXP({
   const handleStartClick = () => setShowStartMenu((p) => !p);
   const handleStartMenuClose = () => setShowStartMenu(false);
 
-  const handleIconDoubleClick = (icon: { id: number; label: string; src: string; x: number; y: number }) => {
+  const handleIconDoubleClick = (icon: {
+    id: number;
+    label: string;
+    src: string;
+    x: number;
+    y: number;
+  }) => {
     setContextMenu({ x: 0, y: 0, visible: false });
     switch (icon.label) {
       case 'Winamp':
-        openWindow(APP_CONFIGS.winamp);
+        setShowWinamp(true);
         break;
       case 'Gadu-Gadu':
         openWindow(APP_CONFIGS.gaduGadu);
@@ -116,6 +123,9 @@ export default function DesktopXP({
         onIconDoubleClick={handleIconDoubleClick}
       />
 
+      {/* --- Winamp (poza WindowManagerem - ma swoje okna) --- */}
+      {showWinamp && <WinampWindow onClose={() => setShowWinamp(false)} />}
+
       {/* --- Window Manager - RENDERUJE OKNA --- */}
       <WindowManager
         windows={windows}
@@ -125,19 +135,19 @@ export default function DesktopXP({
       >
         {(windowId, windowState) => {
           switch (windowId) {
-            case 'winamp':
-              return <WinampWindow onClose={() => closeWindow(windowId)} />;
             case 'gaduGadu':
               return <GaduGaduWindow onClose={() => closeWindow(windowId)} />;
             case 'internetExplorer':
               return (
                 <div style={{ padding: '20px' }}>
-                  <div style={{
-                    background: '#f0f0f0',
-                    padding: '5px',
-                    marginBottom: '10px',
-                    border: '1px inset #ccc'
-                  }}>
+                  <div
+                    style={{
+                      background: '#f0f0f0',
+                      padding: '5px',
+                      marginBottom: '10px',
+                      border: '1px inset #ccc',
+                    }}
+                  >
                     🌐 http://www.onet.pl
                   </div>
                   <h2>🇵🇱 Onet.pl - Portal internetowy</h2>
@@ -152,17 +162,19 @@ export default function DesktopXP({
               );
             case 'counterStrike':
               return (
-                <div style={{
-                  background: '#000',
-                  color: '#0f0',
-                  padding: '20px',
-                  fontFamily: 'monospace',
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }}>
+                <div
+                  style={{
+                    background: '#000',
+                    color: '#0f0',
+                    padding: '20px',
+                    fontFamily: 'monospace',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
                   <h1 style={{ fontSize: '48px', margin: '20px 0' }}>🎯 COUNTER-STRIKE 1.6</h1>
                   <div style={{ fontSize: '24px' }}>GŁÓWNE MENU</div>
                   <div style={{ marginTop: '40px', textAlign: 'center' }}>
@@ -176,25 +188,49 @@ export default function DesktopXP({
               );
             case 'tibia':
               return (
-                <div style={{
-                  background: 'linear-gradient(45deg, #4a4a4a, #2a2a2a)',
-                  color: '#fff',
-                  padding: '20px',
-                  height: '100%',
-                  backgroundImage: 'url("data:image/svg+xml,%3Csvg width="20" height="20" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 20 0 L 0 0 0 20" fill="none" stroke="%23333" stroke-width="1"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100%25" height="100%25" fill="url(%23grid)" /%3E%3C/svg%3E")'
-                }}>
+                <div
+                  style={{
+                    background: 'linear-gradient(45deg, #4a4a4a, #2a2a2a)',
+                    color: '#fff',
+                    padding: '20px',
+                    height: '100%',
+                    backgroundImage:
+                      'url("data:image/svg+xml,%3Csvg width="20" height="20" xmlns="http://www.w3.org/2000/svg"%3E%3Cdefs%3E%3Cpattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"%3E%3Cpath d="M 20 0 L 0 0 0 20" fill="none" stroke="%23333" stroke-width="1"/%3E%3C/pattern%3E%3C/defs%3E%3Crect width="100%25" height="100%25" fill="url(%23grid)" /%3E%3C/svg%3E")',
+                  }}
+                >
                   <h1 style={{ textAlign: 'center', fontSize: '32px' }}>⚔️ TIBIA</h1>
                   <div style={{ textAlign: 'center', marginTop: '50px' }}>
                     <div style={{ fontSize: '18px', marginBottom: '30px' }}>
                       🏰 Wybierz świat gry:
                     </div>
-                    <div style={{ margin: '10px 0', cursor: 'pointer', padding: '10px', border: '1px solid #666' }}>
+                    <div
+                      style={{
+                        margin: '10px 0',
+                        cursor: 'pointer',
+                        padding: '10px',
+                        border: '1px solid #666',
+                      }}
+                    >
                       🌍 Antica (PvP Optional)
                     </div>
-                    <div style={{ margin: '10px 0', cursor: 'pointer', padding: '10px', border: '1px solid #666' }}>
+                    <div
+                      style={{
+                        margin: '10px 0',
+                        cursor: 'pointer',
+                        padding: '10px',
+                        border: '1px solid #666',
+                      }}
+                    >
                       🌍 Dolera (Open PvP)
                     </div>
-                    <div style={{ margin: '10px 0', cursor: 'pointer', padding: '10px', border: '1px solid #666' }}>
+                    <div
+                      style={{
+                        margin: '10px 0',
+                        cursor: 'pointer',
+                        padding: '10px',
+                        border: '1px solid #666',
+                      }}
+                    >
                       🌍 Menera (Optional PvP)
                     </div>
                   </div>
@@ -202,23 +238,23 @@ export default function DesktopXP({
               );
             case 'gtaSanAndreas':
               return (
-                <div style={{
-                  background: 'linear-gradient(135deg, #ff6b35, #f7931e)',
-                  color: '#fff',
-                  padding: '20px',
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  fontFamily: 'Impact, Arial Black, sans-serif'
-                }}>
+                <div
+                  style={{
+                    background: 'linear-gradient(135deg, #ff6b35, #f7931e)',
+                    color: '#fff',
+                    padding: '20px',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontFamily: 'Impact, Arial Black, sans-serif',
+                  }}
+                >
                   <h1 style={{ fontSize: '48px', textShadow: '3px 3px 0px #000' }}>
                     🚗 GRAND THEFT AUTO
                   </h1>
-                  <h2 style={{ fontSize: '32px', textShadow: '2px 2px 0px #000' }}>
-                    SAN ANDREAS
-                  </h2>
+                  <h2 style={{ fontSize: '32px', textShadow: '2px 2px 0px #000' }}>SAN ANDREAS</h2>
                   <div style={{ marginTop: '50px', textAlign: 'center' }}>
                     <div style={{ margin: '15px 0', fontSize: '20px', cursor: 'pointer' }}>
                       ► Start Game
@@ -242,7 +278,9 @@ export default function DesktopXP({
               return (
                 <div style={{ padding: '20px', textAlign: 'center' }}>
                   <h2>🚧 W budowie</h2>
-                  <p>Aplikacja <strong>{windowState.title}</strong> jest w trakcie tworzenia.</p>
+                  <p>
+                    Aplikacja <strong>{windowState.title}</strong> jest w trakcie tworzenia.
+                  </p>
                 </div>
               );
           }
@@ -262,7 +300,7 @@ export default function DesktopXP({
       <StartMenu
         visible={showStartMenu}
         onClose={handleStartMenuClose}
-        onMenuItemClick={id => console.log('📋 Start menu item clicked:', id)}
+        onMenuItemClick={(id) => console.log('📋 Start menu item clicked:', id)}
       />
 
       {/* --- Context Menu --- */}
@@ -290,11 +328,11 @@ export default function DesktopXP({
               display: 'flex',
               alignItems: 'center',
             }}
-            onMouseEnter={e => {
+            onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = '#316ac5';
               e.currentTarget.style.color = '#fff';
             }}
-            onMouseLeave={e => {
+            onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = 'transparent';
               e.currentTarget.style.color = '#000';
             }}
@@ -311,11 +349,11 @@ export default function DesktopXP({
               display: 'flex',
               alignItems: 'center',
             }}
-            onMouseEnter={e => {
+            onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = '#316ac5';
               e.currentTarget.style.color = '#fff';
             }}
-            onMouseLeave={e => {
+            onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = 'transparent';
               e.currentTarget.style.color = '#000';
             }}
@@ -330,11 +368,11 @@ export default function DesktopXP({
               display: 'flex',
               alignItems: 'center',
             }}
-            onMouseEnter={e => {
+            onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = '#316ac5';
               e.currentTarget.style.color = '#fff';
             }}
-            onMouseLeave={e => {
+            onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = 'transparent';
               e.currentTarget.style.color = '#000';
             }}
@@ -363,12 +401,8 @@ export default function DesktopXP({
         <div>Desktop Time: {timeOnDesktop}s</div>
         <div>Open Windows: {windows.length}</div>
         {timeOnDesktop >= 5 && <div style={{ color: '#ff6666' }}>⚡ Glitch ready!</div>}
-        {showAdditionalIcons && (
-          <div style={{ color: '#66ff66' }}>✅ Portfolio unlocked!</div>
-        )}
-        {glitchTriggered && (
-          <div style={{ color: '#ffaa00' }}>🌩️ Glitch triggered!</div>
-        )}
+        {showAdditionalIcons && <div style={{ color: '#66ff66' }}>✅ Portfolio unlocked!</div>}
+        {glitchTriggered && <div style={{ color: '#ffaa00' }}>🌩️ Glitch triggered!</div>}
       </div>
     </div>
   );

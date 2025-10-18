@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 'use client';
 
 import React, { useState } from 'react';
@@ -54,42 +55,198 @@ export default function Folders({ onFinish }: FoldersProps) {
 
   // ------ Treść plików ------
   const folderBody = (key: FolderKey) => {
-    if (key === 'cv')
+    if (key === 'aboutMe')
       return (
         <>
-          <section className="mb-4">
-            <span className="font-bold">Doświadczenie</span>
+          <section className="mb-6">
+            <span className="font-bold text-sm">👨‍💻 DANE OSOBOWE</span>
             {'\n'}
-            - Programista Full-Stack (2022 – obecnie){'\n'}
-            - Web Developer (2020 – 2022){'\n'}
-            - Praktykant IT (2019 – 2020){'\n\n'}
-          </section>
-          <section className="mb-4">
-            <span className="font-bold">Umiejętności</span>
             {'\n'}
-            - TypeScript / React / Node.js{'\n'}
-            - Tailwind CSS / HTML5 / CSS3{'\n'}
-            - MongoDB / SQL / Firebase{'\n'}
-            - Git / Docker / AWS{'\n\n'}
+            <span className="font-bold">Imię i nazwisko:</span> Mateusz Goszczycki{'\n'}
+            <span className="font-bold">Data urodzenia:</span> 22.10.1994{'\n'}
+            <span className="font-bold">Email:</span> Mateusz.goszczycki1994@gmail.com{'\n'}
+            <span className="font-bold">Telefon:</span> [DO UZUPEŁNIENIA]{'\n'}
+            <span className="font-bold">Lokalizacja:</span> Gdynia, Polska{'\n'}
+            {'\n'}
           </section>
-          Edukacja: Informatyka, PW (2018-2022)
+
+          <section className="mb-6">
+            <span className="font-bold text-sm">💼 DOŚWIADCZENIE</span>
+            {'\n'}
+            {'\n'}
+            <span className="font-bold">[STANOWISKO] - [FIRMA]</span>
+            {'\n'}[DATA OD] - [DATA DO / obecnie]{'\n'}
+            {'\n'}* [OPIS OBOWIĄZKÓW 1]{'\n'}* [OPIS OBOWIĄZKÓW 2]{'\n'}* [OPIS OBOWIĄZKÓW 3]{'\n'}
+            {'\n'}
+            <span className="font-bold">[POPRZEDNIE STANOWISKO]</span>
+            {'\n'}[FIRMA | DATA]{'\n'}* [OPIS]{'\n'}
+            {'\n'}
+          </section>
+
+          <section className="mb-6">
+            <span className="font-bold text-sm">🛠️ UMIEJĘTNOŚCI</span>
+            {'\n'}
+            {'\n'}
+            <span className="font-bold">Frontend:</span>
+            {'\n'}React, TypeScript, Next.js, Tailwind CSS, Socket.IO{'\n'}
+            {'\n'}
+            <span className="font-bold">Backend:</span>
+            {'\n'}Node.js, Express, MongoDB, REST API, WebSocket{'\n'}
+            {'\n'}
+            <span className="font-bold">DevOps & Tools:</span>
+            {'\n'}Docker, Git, CI/CD, ESLint, Webpack{'\n'}
+            {'\n'}
+          </section>
+
+          <section className="mb-4">
+            <span className="font-bold text-sm">🔗 LINKI</span>
+            {'\n'}
+            {'\n'}
+            <span className="font-bold">GitHub:</span> github.com/[UZUPEŁNIJ]{'\n'}
+            <span className="font-bold">LinkedIn:</span> linkedin.com/in/[UZUPEŁNIJ]{'\n'}
+            <span className="font-bold">Portfolio:</span> [UZUPEŁNIJ]{'\n'}
+          </section>
         </>
       );
+
     if (key === 'projects')
       return (
         <>
-          <span className="font-bold">Projekty:</span>{'\n'}
-          - Marketplace – platforma ogłoszeniowa (React, Node.js, MongoDB){'\n'}
-          - E-commerce Shop – sklep z płatnościami (Next.js, Stripe, PostgreSQL){'\n'}
-          - Portfolio XP – obecny projekt (React, TS, Tailwind)
+          <section className="mb-6">
+            <span className="font-bold text-sm">🚗 MARKETPLACE SAMOCHODOWY</span>
+            {'\n'}
+            {'\n'}
+            Pełna platforma ogłoszeniowa do kupna i sprzedaży samochodów{'\n'}z zaawansowaną
+            wyszukiwarką i systemem realtime.{'\n'}
+            {'\n'}
+            <span className="font-bold">Tech Stack:</span>
+            {'\n'}* Frontend: React 18.2 + TypeScript, Tailwind CSS, React Router 6.28{'\n'}*
+            Backend: Node.js, Express, MongoDB{'\n'}* Realtime: Socket.IO (powiadomienia, live
+            updates){'\n'}* UI: MUI, Headless UI, Heroicons, lucide-react{'\n'}* Tools: Axios
+            (interceptory, retry, cookies), PWA, react-toastify{'\n'}
+            {'\n'}
+            <span className="font-bold">Zakres odpowiedzialności:</span>
+            {'\n'}* Projekt i wdrożenie pełnej architektury aplikacji (FE, BE, DevOps){'\n'}*
+            Obsługa wszystkich warstw: UI, API, autoryzacja, baza danych, realtime{'\n'}* Integracje
+            zewnętrzne (płatności, zewnętrzne API){'\n'}* Praca z kodem produkcyjnym: optymalizacja,
+            bezpieczeństwo, wersjonowanie{'\n'}
+            {'\n'}
+            <span className="font-bold">Kluczowe funkcjonalności:</span>
+            {'\n'}* Zaawansowana wyszukiwarka z filtrami (marka, model, generacja, parametry){'\n'}*
+            System powiadomień realtime (HTTP + WebSocket){'\n'}* Ulubione z sync localStorage +
+            backend{'\n'}* Panel użytkownika z historią przeglądania{'\n'}* System komentarzy i
+            podobnych ofert{'\n'}* PWA z offline support i auto-update{'\n'}* Responsywna nawigacja
+            z licznikami powiadomień{'\n'}
+            {'\n'}
+            <span className="font-bold">Architektura:</span>
+            {'\n'}* Aplikacja modułowa z leniwie ładowanymi widokami{'\n'}* Konteksty: autoryzacja
+            (HttpOnly cookies), powiadomienia, ulubione{'\n'}* apiClient z retry, refresh tokenów,
+            cache, custom headers{'\n'}* Komponenty komunikują się z backend w czasie rzeczywistym
+            {'\n'}
+            {'\n'}
+          </section>
+
+          <section className="mb-4">
+            <span className="font-bold text-sm">🪟 PORTFOLIO XP (ten projekt!)</span>
+            {'\n'}
+            {'\n'}
+            Interaktywne portfolio w stylu Windows XP - nostalgiczna podróż{'\n'}do świata
+            komputerów z lat 2000.{'\n'}
+            {'\n'}
+            <span className="font-bold">Tech Stack:</span>
+            {'\n'}* Next.js 14, React 18, TypeScript{'\n'}* Tailwind CSS{'\n'}
+            {'\n'}
+            <span className="font-bold">Features:</span>
+            {'\n'}* Symulacja boot screen Windows XP z progress barem{'\n'}* System okien z drag &
+            drop (przeciąganie, minimalizowanie){'\n'}* Działające aplikacje nostalgiczne: Winamp,
+            Gadu-Gadu, gry retro{'\n'}* Glitch effects i easter eggs (Crazy Frog virus!){'\n'}*
+            System wirusa Crazy Frog z animacjami{'\n'}* Responsywny taskbar i Start Menu{'\n'}*
+            Notatnik w stylu XP z 3 plikami do przejrzenia{'\n'}* Ikony w stylu Windows XP,
+            autentyczne dźwięki systemu{'\n'}
+            {'\n'}
+            <span className="font-bold">Easter Eggs:</span>
+            {'\n'}* Crazy Frog jako "wirus" z możliwością usunięcia{'\n'}* Winamp z odtwarzaniem
+            muzyki{'\n'}* Gadu-Gadu z symulacją czatu{'\n'}* Retro gry (Paint, Minesweeper){'\n'}
+          </section>
         </>
       );
+
+    // CV
     return (
       <>
-        Fan technologii i retro-gier.{'\n'}
-        Front-end (React/TS) + back-end (Node).{'\n'}
-        Po godzinach: eksperymenty z AI, gry, sci-fi.{'\n'}
-        Otwarty na współpracę!
+        <section className="mb-6">
+          <span className="font-bold text-sm">🧠 ZAKRES ODPOWIEDZIALNOŚCI</span>
+          {'\n'}
+          {'\n'}* Projekt i wdrożenie architektury aplikacji (frontend, backend, DevOps).{'\n'}*
+          Obsługa wszystkich warstw: UI, API, autoryzacja, baza danych, realtime.{'\n'}* Integracje
+          z zewnętrznymi usługami (Płatności, zewnętrzne API).{'\n'}* Praca z kodem produkcyjnym:
+          optymalizacja, bezpieczeństwo, wersjonowanie.{'\n'}
+          {'\n'}
+        </section>
+
+        <section className="mb-6">
+          <span className="font-bold text-sm">🖥 FRONTEND</span>
+          {'\n'}
+          {'\n'}* React 18.2 + TypeScript, React Router 6.28, Create React App.{'\n'}* Tailwind CSS
+          z custom breakpoints i plugins (typography, animations).{'\n'}* Komponenty UI: MUI,
+          Headless UI, Heroicons, lucide-react.{'\n'}* Axios z interceptorami (obsługa 401/431,
+          retry, cookies).{'\n'}* Socket.io-client do komunikacji realtime.{'\n'}* PWA: service
+          worker, detekcja aktualizacji, dedykowany przycisk instalacji.{'\n'}* UX tools:
+          react-toastify, notistack.{'\n'}* Dev: ESLint, Babel, autoprefixer,
+          webpack-bundle-analyzer.{'\n'}
+          {'\n'}
+        </section>
+
+        <section className="mb-6">
+          <span className="font-bold text-sm">📦 ARCHITEKTURA APLIKACJI</span>
+          {'\n'}
+          {'\n'}* Aplikacja zorganizowana modułowo: App.js centralnie łączy router,{'\n'}
+          {'  '}leniwe widoki i warstwy kontekstowe.{'\n'}* Konteksty: autoryzacja (HttpOnly
+          cookies), powiadomienia, ulubione,{'\n'}
+          {'  '}socket, formularz ogłoszeń, mobilne menu, responsywność.{'\n'}* Obsługa stanu
+          aplikacji + realtime przez NotificationService,{'\n'}
+          {'  '}SocketContext, FavoritesContext (localStorage + backend sync).{'\n'}
+          {'\n'}
+        </section>
+
+        <section className="mb-6">
+          <span className="font-bold text-sm">⚙️ KLUCZOWE FUNKCJONALNOŚCI</span>
+          {'\n'}
+          {'\n'}* Wyszukiwarka i filtry: SearchFormUpdated (marka, model, generacja,{'\n'}
+          {'  '}technikalia), useFilterCounts, BasicFilters, useCarData (z fallbackiem cache).
+          {'\n'}* Lista ogłoszeń: ListingsPage z sortowaniem, integracją ulubionych,{'\n'}
+          {'  '}dopasowaniem wyników.{'\n'}* Widok szczegółowy: ListingDetails — dane, komentarze,
+          podobne oferty,{'\n'}
+          {'  '}historia przeglądania.{'\n'}* System powiadomień i ulubionych: HTTP + WebSocket,
+          notyfikacje dla{'\n'}
+          {'  '}właścicieli ogłoszeń.{'\n'}* Karta ogłoszenia: ListingCard – responsywna prezentacja
+          danych{'\n'}
+          {'  '}z szybkim dodaniem do ulubionych.{'\n'}* Responsywna nawigacja z dostępem do panelu
+          użytkownika, licznikiem{'\n'}
+          {'  '}powiadomień i modalem logowania.{'\n'}
+          {'\n'}
+        </section>
+
+        <section className="mb-6">
+          <span className="font-bold text-sm">🌐 INTEGRACJA Z BACKENDEM</span>
+          {'\n'}
+          {'\n'}* apiClient: obsługuje retry, refresh tokenów, cache, cookies (HttpOnly),{'\n'}
+          {'  '}custom nagłówki.{'\n'}* AdsService: wszystkie endpointy ogłoszeń (liczniki, rotacje,
+          multimedia,{'\n'}
+          {'  '}statusy).{'\n'}* CarDataService: dane marek/modeli/generacji z fallbackiem.{'\n'}*
+          NotificationService: REST + Socket.IO – aktualizacja stanu i toastów w UI.{'\n'}*
+          Komponenty i konteksty komunikują się z backendem i reagują na akcje{'\n'}
+          {'  '}użytkowników w czasie rzeczywistym.{'\n'}
+          {'\n'}
+        </section>
+
+        <section className="mb-4">
+          <span className="font-bold text-sm">🌱 ROZWÓJ</span>
+          {'\n'}
+          {'\n'}
+          Stale rozwijam swoje umiejętności pracując nad nowymi projektami{'\n'}i eksperymentując z
+          najnowszymi technologiami frontendowymi.{'\n'}
+        </section>
       </>
     );
   };
@@ -102,16 +259,22 @@ export default function Folders({ onFinish }: FoldersProps) {
         <div className="w-full max-w-2xl rounded border-2 border-[#7a7a7a] shadow-xl bg-[#f6f6f6]">
           {/* Pasek tytułu */}
           {notepadHeader(
-            current === 'cv'
-              ? 'CV.txt'
+            current === 'aboutMe'
+              ? 'AboutMe.txt'
               : current === 'projects'
-              ? 'Projects.txt'
-              : 'AboutMe.txt'
+                ? 'Projects.txt'
+                : 'CV.txt'
           )}
           {/* Menu Notatnika */}
           {notepadMenu}
           {/* Arkusz Notatnika */}
-          <div className="px-4 py-2 bg-white h-80 font-mono text-xs text-black overflow-y-auto border-x border-b border-[#b5b5b5] whitespace-pre-wrap select-text">
+          <div
+            className="px-4 py-2 bg-white h-80 font-mono text-xs text-black overflow-y-scroll border-x border-b border-[#b5b5b5] whitespace-pre-wrap select-text notepad-content"
+            style={{
+              scrollbarWidth: 'thin',
+              scrollbarColor: '#c0c0c0 #f0f0f0',
+            }}
+          >
             {folderBody(current)}
           </div>
           {/* Dolny pasek, jak w notatniku */}
@@ -126,13 +289,46 @@ export default function Folders({ onFinish }: FoldersProps) {
           </div>
         </div>
       ) : allDone ? (
-        <div className="text-center space-y-6 bg-white/90 p-10 rounded-lg border shadow">
-          <h2 className="text-3xl font-bold">Wszystkie pliki przejrzane!</h2>
+        <div className="text-center space-y-6 bg-gradient-to-br from-green-50 to-blue-50 p-10 rounded-lg border-2 border-green-500 shadow-2xl max-w-xl">
+          <div className="flex justify-center mb-4">
+            <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center animate-bounce">
+              <span className="text-4xl">✅</span>
+            </div>
+          </div>
+          <h2 className="text-3xl font-bold text-green-700">System Odzyskany!</h2>
+          <div className="space-y-3 text-gray-700 text-left bg-white/50 p-5 rounded-lg">
+            <p className="text-center font-semibold text-lg text-blue-800">
+              🎮 Zapraszam w podróż do lat 2000! 🎮
+            </p>
+            <p className="leading-relaxed">
+              Na pulpicie czeka prawdziwa nostalgiczna przygoda. <strong>Kliknij w ikonki</strong> -
+              każda z nich kryje coś wyjątkowego:
+            </p>
+            <ul className="space-y-2 pl-4">
+              <li>
+                🎵 <strong>Winamp</strong> z hitami z lat 2000
+              </li>
+              <li>
+                💬 <strong>Gadu-Gadu</strong> - kultowy komunikator
+              </li>
+              <li>
+                🎯 <strong>Gry retro</strong> - CS 1.6, Tibia, GTA San Andreas
+              </li>
+              <li>
+                🎨 <strong>Easter eggs</strong> - warto eksplorować!
+              </li>
+            </ul>
+            <p className="text-center text-sm italic text-gray-600 pt-2">
+              Nie jest to zwykłe portfolio - to interaktywne doświadczenie! 🚀
+            </p>
+          </div>
           <button
             onClick={onFinish}
-            className="bg-gray-900 text-white font-bold px-8 py-3 rounded hover:bg-gray-800 transition"
+            className="group relative bg-gradient-to-r from-blue-600 to-blue-800 text-white font-bold px-10 py-4 rounded-lg hover:from-blue-700 hover:to-blue-900 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 flex items-center gap-3 mx-auto"
           >
-            KONTYNUUJ
+            <span className="text-2xl group-hover:rotate-12 transition-transform">🚀</span>
+            <span className="text-lg">URUCHOM PULPIT</span>
+            <span className="text-2xl group-hover:-rotate-12 transition-transform">💻</span>
           </button>
         </div>
       ) : (
@@ -152,18 +348,16 @@ export default function Folders({ onFinish }: FoldersProps) {
                   }`}
                 >
                   <div className="w-16 h-16 bg-yellow-300 mb-2 flex items-center justify-center text-2xl">
-                    {key === 'cv' ? '📄' : key === 'projects' ? '📁' : '👤'}
+                    {key === 'aboutMe' ? '👤' : key === 'projects' ? '📁' : '📄'}
                   </div>
                   <span className="text-sm">
-                    {key === 'cv'
-                      ? 'CV.txt'
+                    {key === 'aboutMe'
+                      ? 'AboutMe.txt'
                       : key === 'projects'
-                      ? 'Projects.txt'
-                      : 'AboutMe.txt'}
+                        ? 'Projects.txt'
+                        : 'CV.txt'}
                   </span>
-                  {viewed[key] && (
-                    <span className="text-xs text-green-600">✓ Przejrzane</span>
-                  )}
+                  {viewed[key] && <span className="text-xs text-green-600">✓ Przejrzane</span>}
                 </div>
               ))}
             </div>
@@ -173,6 +367,47 @@ export default function Folders({ onFinish }: FoldersProps) {
           </main>
         </div>
       )}
+
+      {/* Style dla scrollbara Windows XP */}
+      <style jsx>{`
+        .notepad-content::-webkit-scrollbar {
+          width: 16px;
+          background-color: #f0f0f0;
+        }
+
+        .notepad-content::-webkit-scrollbar-track {
+          background-color: #f0f0f0;
+          border-left: 1px solid #c0c0c0;
+        }
+
+        .notepad-content::-webkit-scrollbar-thumb {
+          background: linear-gradient(to right, #e0e0e0, #c0c0c0);
+          border: 1px outset #d0d0d0;
+          border-radius: 1px;
+        }
+
+        .notepad-content::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(to right, #d0d0d0, #b0b0b0);
+        }
+
+        .notepad-content::-webkit-scrollbar-button {
+          height: 16px;
+          background-color: #e0e0e0;
+          border: 1px outset #d0d0d0;
+        }
+
+        .notepad-content::-webkit-scrollbar-button:vertical:decrement {
+          background: #e0e0e0
+            url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M8 6 L12 10 L4 10 Z" fill="%23000"/></svg>')
+            center no-repeat;
+        }
+
+        .notepad-content::-webkit-scrollbar-button:vertical:increment {
+          background: #e0e0e0
+            url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M8 10 L12 6 L4 6 Z" fill="%23000"/></svg>')
+            center no-repeat;
+        }
+      `}</style>
     </div>
   );
 }

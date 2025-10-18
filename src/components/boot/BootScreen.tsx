@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 interface BootScreenProps {
   onFinish?: () => void;
@@ -9,57 +9,65 @@ const BootScreen: React.FC<BootScreenProps> = ({ onFinish }) => {
   const [showStartupText, setShowStartupText] = useState(false);
   const [fadeOut, setFadeOut] = useState(false);
 
+  // Ref aby uniknąć restartów useEffect
+  const onFinishRef = useRef(onFinish);
+
   useEffect(() => {
+    onFinishRef.current = onFinish;
+  }, [onFinish]);
+
+  useEffect(() => {
+    console.log('BootScreen: Starting boot sequence');
+
+    // FAZA 1: Pasek ładowania - 5 sekund do 100%
+    const startTime = Date.now();
+    const loadingDuration = 5000;
+
     const progressInterval = setInterval(() => {
-      setProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-          return 100;
-        }
-        // Przyspieszone ładowanie - większy przyrost
-        return prev + Math.random() * 4 + 1.5;
-      });
-    }, 150); // Częstsze aktualizacje
+      const elapsed = Date.now() - startTime;
+      const calculatedProgress = Math.min((elapsed / loadingDuration) * 100, 100);
+      setProgress(calculatedProgress);
+
+      // Upewnij się że pasek dojdzie do 100%
+      if (calculatedProgress >= 100) {
+        clearInterval(progressInterval);
+      }
+    }, 50);
+
+    // Po 5 sekundach: wyczyść interval i ustaw 100%
+    const set100Timer = setTimeout(() => {
+      clearInterval(progressInterval);
+      setProgress(100);
+      console.log('BootScreen: Progress bar reached 100%');
+    }, 5000);
+
+    // Po 5s pasek zatrzymuje się na 100%, poczekaj 0.5s i DOPIERO pokaż tekst
+    const showTextTimer = setTimeout(() => {
+      console.log('BootScreen: Showing startup text after pause');
+      setShowStartupText(true);
+    }, 5500);
+
+    // Po 5s + 0.5s + 2s = 7.5s: zacznij fade out i JEDNOCZEŚNIE wywołaj onFinish
+    const fadeOutTimer = setTimeout(() => {
+      console.log('BootScreen: Starting fade out AND calling onFinish');
+      setFadeOut(true);
+
+      // Użyj ref zamiast bezpośrednio onFinish
+      if (onFinishRef.current) {
+        onFinishRef.current();
+      }
+    }, 7500);
 
     return () => {
       clearInterval(progressInterval);
+      clearTimeout(set100Timer);
+      clearTimeout(showTextTimer);
+      clearTimeout(fadeOutTimer);
     };
-  }, []);
-  
-  // Po osiągnięciu 100% pokaż tekst uruchamiania
-  useEffect(() => {
-    if (progress === 100) {
-      console.log("BootScreen: Progress reached 100%, showing startup text");
-      
-      // Czekaj 1 sekundę, potem pokaż tekst uruchamiania
-      const startupTimer = setTimeout(() => {
-        setShowStartupText(true);
-        
-        // Po 3 sekundach rozpocznij fade out
-        const finishTimer = setTimeout(() => {
-          console.log("BootScreen: Starting fade out");
-          setFadeOut(true);
-          
-          // Po fade out wywołaj onFinish
-          const callbackTimer = setTimeout(() => {
-            console.log("BootScreen: Calling onFinish");
-            if (onFinish) {
-              onFinish();
-            }
-          }, 1000);
-          
-          return () => clearTimeout(callbackTimer);
-        }, 3000);
-        
-        return () => clearTimeout(finishTimer);
-      }, 1000);
-      
-      return () => clearTimeout(startupTimer);
-    }
-  }, [progress, onFinish]);
+  }, []); // PUSTE dependencies - useEffect uruchomi się tylko raz!
 
   return (
-    <div 
+    <div
       className="min-h-screen flex flex-col items-center justify-center font-sans relative"
       style={{
         background: 'linear-gradient(to bottom, #245edb 0%, #1941a5 100%)',
@@ -72,7 +80,7 @@ const BootScreen: React.FC<BootScreenProps> = ({ onFinish }) => {
         height: '100vh',
         zIndex: 9999,
         opacity: fadeOut ? 0 : 1,
-        transition: 'opacity 1s ease-out'
+        transition: 'opacity 1s ease-out',
       }}
     >
       {/* Logo Windows XP - dokładna replika */}
@@ -80,39 +88,39 @@ const BootScreen: React.FC<BootScreenProps> = ({ onFinish }) => {
         {/* Flagka Windows - 4 kolorowe prostokąty */}
         <div className="relative mb-6 mx-auto w-20 h-12">
           {/* Czerwony */}
-          <div 
+          <div
             className="absolute w-12 h-8 bg-gradient-to-br from-red-400 to-red-600"
             style={{
               clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
               left: '0px',
-              top: '0px'
+              top: '0px',
             }}
           ></div>
           {/* Zielony */}
-          <div 
+          <div
             className="absolute w-12 h-8 bg-gradient-to-br from-green-400 to-green-600"
             style={{
               clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
               left: '40px',
-              top: '0px'
+              top: '0px',
             }}
           ></div>
           {/* Niebieski */}
-          <div 
+          <div
             className="absolute w-12 h-8 bg-gradient-to-br from-blue-400 to-blue-700"
             style={{
               clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
               left: '0px',
-              top: '20px'
+              top: '20px',
             }}
           ></div>
           {/* Żółty */}
-          <div 
+          <div
             className="absolute w-12 h-8 bg-gradient-to-br from-yellow-300 to-yellow-500"
             style={{
               clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
               left: '40px',
-              top: '20px'
+              top: '20px',
             }}
           ></div>
         </div>
@@ -122,7 +130,7 @@ const BootScreen: React.FC<BootScreenProps> = ({ onFinish }) => {
           <div className="text-white text-base font-normal tracking-wider mb-2">
             Microsoft<span className="text-xs align-top">®</span>
           </div>
-          
+
           {/* Windows XP */}
           <div className="flex items-baseline justify-center">
             <span className="text-white text-5xl font-light tracking-wide">Windows</span>
@@ -141,7 +149,7 @@ const BootScreen: React.FC<BootScreenProps> = ({ onFinish }) => {
               {/* Tło paska */}
               <div className="w-full h-full bg-gradient-to-b from-gray-800 to-gray-900 relative">
                 {/* Progress bar */}
-                <div 
+                <div
                   className="h-full bg-gradient-to-r from-blue-500 to-blue-400 relative transition-all duration-200 ease-out"
                   style={{ width: `${Math.min(progress, 100)}%` }}
                 >
@@ -152,14 +160,14 @@ const BootScreen: React.FC<BootScreenProps> = ({ onFinish }) => {
                 </div>
               </div>
             </div>
-            
+
             {/* Procent ładowania */}
             <div className="text-center">
-              <span 
+              <span
                 className="text-white text-sm font-mono"
                 style={{
                   fontFamily: 'Tahoma, "MS Sans Serif", sans-serif',
-                  textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
                 }}
               >
                 {Math.floor(progress)}%
@@ -169,40 +177,40 @@ const BootScreen: React.FC<BootScreenProps> = ({ onFinish }) => {
         ) : (
           // Tekst uruchamiania
           <div className="text-center">
-            <p 
+            <p
               className="text-white mb-8"
               style={{
                 fontFamily: 'Tahoma, "MS Sans Serif", sans-serif',
                 fontSize: '14px',
                 fontWeight: '400',
                 textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
-                animation: 'fadeInText 0.8s ease-in-out'
+                animation: 'fadeInText 0.8s ease-in-out',
               }}
             >
-              Trwa uruchamianie systemu Windows...
+              Uruchamianie Windows...
             </p>
-            
+
             {/* Animowane kropki */}
             <div className="flex justify-center space-x-1">
-              <div 
+              <div
                 className="w-2 h-2 bg-white rounded-full"
                 style={{
                   animation: 'dotPulse 1.4s ease-in-out 0s infinite',
-                  filter: 'drop-shadow(0 0 3px rgba(255,255,255,0.8))'
+                  filter: 'drop-shadow(0 0 3px rgba(255,255,255,0.8))',
                 }}
               ></div>
-              <div 
+              <div
                 className="w-2 h-2 bg-white rounded-full"
                 style={{
                   animation: 'dotPulse 1.4s ease-in-out 0.2s infinite',
-                  filter: 'drop-shadow(0 0 3px rgba(255,255,255,0.8))'
+                  filter: 'drop-shadow(0 0 3px rgba(255,255,255,0.8))',
                 }}
               ></div>
-              <div 
+              <div
                 className="w-2 h-2 bg-white rounded-full"
                 style={{
                   animation: 'dotPulse 1.4s ease-in-out 0.4s infinite',
-                  filter: 'drop-shadow(0 0 3px rgba(255,255,255,0.8))'
+                  filter: 'drop-shadow(0 0 3px rgba(255,255,255,0.8))',
                 }}
               ></div>
             </div>
@@ -233,7 +241,9 @@ const BootScreen: React.FC<BootScreenProps> = ({ onFinish }) => {
         }
 
         @keyframes dotPulse {
-          0%, 80%, 100% {
+          0%,
+          80%,
+          100% {
             opacity: 0.3;
             transform: scale(0.8);
           }

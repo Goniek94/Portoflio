@@ -13,25 +13,29 @@ interface StartMenuProps {
 
 /* główne wpisy – prawa kolumna */
 const MAIN = [
-  { id: 'programs',  label: 'Programy',                icon: '/icons/menu-programs.png',  submenu: true },
-  { id: 'documents', label: 'Dokumenty',               icon: '/icons/menu-docs.png',      submenu: true },
-  { id: 'settings',  label: 'Ustawienia',              icon: '/icons/menu-settings.png',  submenu: true },
-  { id: 'search',    label: 'Wyszukaj',                icon: '/icons/menu-search.png' },
-  { id: 'help',      label: 'Pomoc i obsługa techn.',  icon: '/icons/menu-help.png' },
-  { id: 'run',       label: 'Uruchom…',                icon: '/icons/menu-run.png' },
+  { id: 'programs', label: 'Programy', icon: '📁', submenu: true },
+  { id: 'documents', label: 'Dokumenty', icon: '📄', submenu: true },
+  { id: 'settings', label: 'Ustawienia', icon: '⚙️', submenu: true },
+  { id: 'search', label: 'Wyszukaj', icon: '🔍' },
+  { id: 'help', label: 'Pomoc i obsługa techn.', icon: '❓' },
+  { id: 'run', label: 'Uruchom…', icon: '▶️' },
 ];
 
 /* dolny pasek */
 const BOTTOM = [
-  { id: 'logoff',   label: 'Wyloguj użytkownika…', icon: '/icons/menu-logoff.png' },
-  { id: 'shutdown', label: 'Zamknij komputer…',    icon: '/icons/menu-shutdown.png' },
+  { id: 'logoff', label: 'Wyloguj użytkownika…', icon: '👤' },
+  { id: 'shutdown', label: 'Zamknij komputer…', icon: '🔌' },
 ];
 
-export default function StartMenu({
-  visible,
-  onClose,
-  onMenuItemClick,
-}: StartMenuProps) {
+/* pinned apps */
+const PINNED = [
+  { label: 'Internet Explorer', icon: '🌐' },
+  { label: 'Outlook Express', icon: '📧' },
+  { label: 'Gadu-Gadu', icon: '💬' },
+  { label: 'Winamp', icon: '🎵' },
+];
+
+export default function StartMenu({ visible, onClose, onMenuItemClick }: StartMenuProps) {
   if (!visible) return null;
 
   const click = (id: string) => {
@@ -75,13 +79,21 @@ export default function StartMenu({
             color: '#fff',
           }}
         >
-          <img
-            src="/icons/user.png"
-            width={40}
-            height={40}
-            alt=""
-            style={{ borderRadius: '50%', border: '2px solid #fff' }}
-          />
+          <div
+            style={{
+              width: 40,
+              height: 40,
+              borderRadius: '50%',
+              border: '2px solid #fff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: 24,
+              background: '#2151a0',
+            }}
+          >
+            👤
+          </div>
           <div style={{ fontWeight: 'bold' }}>Użytkownik</div>
         </div>
 
@@ -96,44 +108,31 @@ export default function StartMenu({
               color: '#fff',
             }}
           >
-            <div style={{ fontSize: 10, opacity: 0.8, marginBottom: 6 }}>
-              Najczęściej używane:
-            </div>
-            {['Internet Explorer', 'Outlook Express', 'Gadu-Gadu', 'Winamp'].map(
-              (label, i) => (
-                <div
-                  key={label}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    padding: '4px 6px',
-                    cursor: 'pointer',
-                    fontSize: 11,
-                  }}
-                  onMouseEnter={e =>
-                    (e.currentTarget.style.background = 'rgba(255,255,255,.12)')
-                  }
-                  onMouseLeave={e =>
-                    (e.currentTarget.style.background = 'transparent')
-                  }
-                  onClick={() => click(`pinned-${label}`)}
-                >
-                  <img
-                    src={`/icons/pinned-${i}.png`}
-                    width={20}
-                    height={20}
-                    alt=""
-                  />
-                  {label}
-                </div>
-              ),
-            )}
+            <div style={{ fontSize: 10, opacity: 0.8, marginBottom: 6 }}>Najczęściej używane:</div>
+            {PINNED.map((app) => (
+              <div
+                key={app.label}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '4px 6px',
+                  cursor: 'pointer',
+                  fontSize: 11,
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,.12)')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                onClick={() => click(`pinned-${app.label}`)}
+              >
+                <span style={{ fontSize: 16 }}>{app.icon}</span>
+                {app.label}
+              </div>
+            ))}
           </div>
 
           {/* prawa kolumna – główne wpisy */}
           <div style={{ flex: 1, background: '#f0f0f0', padding: 8 }}>
-            {MAIN.map(item => (
+            {MAIN.map((item) => (
               <div
                 key={item.id}
                 style={{
@@ -144,18 +143,18 @@ export default function StartMenu({
                   cursor: 'pointer',
                   gap: 8,
                 }}
-                onMouseEnter={e => {
+                onMouseEnter={(e) => {
                   e.currentTarget.style.background = '#316ac5';
                   e.currentTarget.style.color = '#fff';
                 }}
-                onMouseLeave={e => {
+                onMouseLeave={(e) => {
                   e.currentTarget.style.background = 'transparent';
                   e.currentTarget.style.color = '#000';
                 }}
                 onClick={() => click(item.id)}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <img src={item.icon} width={20} height={20} alt="" />
+                  <span style={{ fontSize: 16 }}>{item.icon}</span>
                   {item.label}
                 </div>
                 {item.submenu && <span style={{ fontSize: 8 }}>▶</span>}
@@ -165,7 +164,7 @@ export default function StartMenu({
             {/* separator */}
             <div style={{ margin: '6px 0', borderTop: '1px solid #ccc' }} />
 
-            {BOTTOM.map(item => (
+            {BOTTOM.map((item) => (
               <div
                 key={item.id}
                 style={{
@@ -175,17 +174,17 @@ export default function StartMenu({
                   padding: '4px 6px',
                   cursor: 'pointer',
                 }}
-                onMouseEnter={e => {
+                onMouseEnter={(e) => {
                   e.currentTarget.style.background = '#316ac5';
                   e.currentTarget.style.color = '#fff';
                 }}
-                onMouseLeave={e => {
+                onMouseLeave={(e) => {
                   e.currentTarget.style.background = 'transparent';
                   e.currentTarget.style.color = '#000';
                 }}
                 onClick={() => click(item.id)}
               >
-                <img src={item.icon} width={20} height={20} alt="" />
+                <span style={{ fontSize: 16 }}>{item.icon}</span>
                 {item.label}
               </div>
             ))}

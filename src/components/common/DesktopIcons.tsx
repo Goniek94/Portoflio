@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-// 👇 IMPORT WINAMPA
-import WinampWindow from '../apps/winamp/WinampWindow';
 
 type IconData = {
   id: number;
@@ -46,9 +44,6 @@ export default function DesktopIcons({
   const [offsetX, setOffsetX] = useState(0);
   const [offsetY, setOffsetY] = useState(0);
 
-  // 👇 NOWY STATE DLA OTWARTYCH APLIKACJI
-  const [openApps, setOpenApps] = useState<string[]>([]);
-
   /* --- Dodawanie ikon portfolio --- */
   useEffect(() => {
     if (showPortfolioIcons) {
@@ -87,25 +82,10 @@ export default function DesktopIcons({
 
   /* ----------  DOUBLE CLICK  ---------- */
   function handleIconDoubleClick(icon: IconData) {
-    console.log(`Opening: ${icon.label}`);
-
-    // 👇 OBSŁUGA WINAMPA
-    if (icon.label === 'Winamp') {
-      if (!openApps.includes('winamp')) {
-        setOpenApps((prev) => [...prev, 'winamp']);
-      }
-    }
-
-    // Wywołaj zewnętrzny callback jeśli istnieje
+    // Wywołaj zewnętrzny callback - desktop.tsx obsługuje otwieranie aplikacji
     if (onIconDoubleClick) {
       onIconDoubleClick(icon);
     }
-  }
-
-  /* ----------  ZAMYKANIE APLIKACJI  ---------- */
-  function handleCloseApp(appName: string) {
-    console.log(`Closing app: ${appName}`); // Debug log
-    setOpenApps((prev) => prev.filter((app) => app !== appName));
   }
 
   /* ----------  EMOJI MAPPER Z FALLBACKIEM ---------- */
@@ -123,37 +103,6 @@ export default function DesktopIcons({
     if (label.includes('Need')) return '🏎️';
     if (label.includes('Icy')) return '🧊';
     return '💾';
-  }
-
-  /* ----------  SORTOWANIE  ---------- */
-  function sortIcons() {
-    setIcons((prev) => {
-      const sorted = [...prev].sort((a, b) =>
-        a.label.localeCompare(b.label, 'pl', { sensitivity: 'base' })
-      );
-
-      const cols = 4,
-        colW = 118,
-        rowH = 108,
-        startX = 32,
-        startY = 32;
-      return sorted.map((icon, i) => {
-        const col = i % cols,
-          row = Math.floor(i / cols);
-        return { ...icon, x: startX + col * colW, y: startY + row * rowH };
-      });
-    });
-  }
-
-  /* ----------  OBSŁUGA BŁĘDÓW IKON  ---------- */
-  function handleImageError(e: React.SyntheticEvent<HTMLImageElement>, icon: IconData) {
-    console.warn(`Icon failed to load: ${icon.src} for ${icon.label}`);
-    // Ukryj obrazek, pokaż emoji
-    e.currentTarget.style.display = 'none';
-    const parent = e.currentTarget.parentElement;
-    if (parent) {
-      parent.innerHTML = `<span style="fontSize: 24px">${getIconEmoji(icon.label)}</span>`;
-    }
   }
 
   return (
@@ -179,7 +128,7 @@ export default function DesktopIcons({
             e.currentTarget.style.border = '1px solid transparent';
           }}
         >
-          {/* Icon placeholder */}
+          {/* Icon - używamy emoji zamiast PNG */}
           <div
             style={{
               width: 32,
@@ -190,23 +139,12 @@ export default function DesktopIcons({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 16,
+              fontSize: 32,
               borderRadius: '2px',
+              filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.3))',
             }}
           >
-            {/* 🎵 RENDERUJ PRAWDZIWĄ IKONĘ Z FALLBACKIEM */}
-            <img
-              src={icon.src}
-              alt={icon.label}
-              style={{
-                width: 32,
-                height: 32,
-                objectFit: 'contain',
-                filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.3))',
-              }}
-              draggable={false}
-              onError={(e) => handleImageError(e, icon)}
-            />
+            {getIconEmoji(icon.label)}
           </div>
 
           {/* Icon label */}
@@ -224,14 +162,6 @@ export default function DesktopIcons({
           </div>
         </div>
       ))}
-
-      {/* ----------  OTWARTE APLIKACJE  ---------- */}
-      {openApps.includes('winamp') && <WinampWindow onClose={() => handleCloseApp('winamp')} />}
-
-      {/* Context menu funkcja - można wyeksportować */}
-      <div className="hidden">
-        <button onClick={sortIcons}>Sort Icons</button>
-      </div>
     </div>
   );
 }

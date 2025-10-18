@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import WinampPlayer from "./WinampPlayer";
-import WinampPlaylist from "./WinampPlaylist";
+import React, { useState } from 'react';
+import WinampPlayer from './WinampPlayer';
+import WinampPlaylist from './WinampPlaylist';
 
 interface Track {
   title: string;
@@ -15,97 +15,67 @@ interface WinampWindowProps {
 // 👇 HITY Z LAT 2000 - NOSTALGIA PACK! 🎵 (bez Windows Startup - to tylko do bootowania! 😂)
 const tracks: Track[] = [
   {
-    title: "Crazy Frog",
-    artist: "Crazy Frog",
-    url: "/sound/CrazyFrog.mp3"  // ✅ Masz już
-  },
-  
-  // 🎸 LINKIN PARK CLASSICS
-  {
-    title: "In the End",
-    artist: "Linkin Park",
-    url: "/sound/linkin_park_in_the_end.mp3"
+    title: 'Bring Me to Life',
+    artist: 'Evanescence',
+    url: '/sound/Evanescence - Bring Me To Life.mp3',
   },
   {
-    title: "Numb", 
-    artist: "Linkin Park",
-    url: "/sound/linkin_park_numb.mp3"
+    title: 'In the End',
+    artist: 'Linkin Park',
+    url: '/sound/Linkin Park - In The End.mp3',
   },
-  
-  // 👑 BRITNEY CLASSICS
+
   {
-    title: "Oops!... I Did It Again",
-    artist: "Britney Spears",
-    url: "/sound/britney_oops.mp3"
+    title: 'Oops!... I Did It Again',
+    artist: 'Britney Spears',
+    url: '/sound/Britney Spears - Oops!...I Did It Again (Official HD Video).mp3',
   },
   {
-    title: "...Baby One More Time",
-    artist: "Britney Spears", 
-    url: "/sound/britney_baby_one_more_time.mp3"
+    title: '...Baby One More Time',
+    artist: 'Britney Spears',
+    url: '/sound/Britney Spears - ...Baby One More Time (Official Video).mp3',
   },
-  
+
   // 🎤 EMINEM HITS
   {
-    title: "The Real Slim Shady",
-    artist: "Eminem",
-    url: "/sound/eminem_real_slim_shady.mp3"
+    title: 'The Real Slim Shady',
+    artist: 'Eminem',
+    url: '/sound/Eminem - The Real Slim Shady (Uncensored).mp3',
   },
+
   {
-    title: "Lose Yourself",
-    artist: "Eminem",
-    url: "/sound/eminem_lose_yourself.mp3"
+    title: 'Without Me',
+    artist: 'Eminem',
+    url: '/sound/Eminem - Without Me (Subtitulada en Español).mp3',
   },
-  {
-    title: "Without Me",
-    artist: "Eminem",
-    url: "/sound/eminem_without_me.mp3"
-  },
-  
-  // 🇵🇱 KRZYSZTOF KRAWCZYK
-  {
-    title: "Jak Minął Dzień",
-    artist: "Krzysztof Krawczyk",
-    url: "/sound/krawczyk_jak_minal_dzien.mp3"
-  },
-  {
-    title: "Parostatek",
-    artist: "Krzysztof Krawczyk", 
-    url: "/sound/krawczyk_parostatek.mp3"
-  },
-  
+
   // 🇲🇩 DRAGOSTEA DIN TEI ERA
   {
-    title: "Dragostea Din Tei", 
-    artist: "O-Zone",
-    url: "/sound/ozone_dragostea_din_tei.mp3"
+    title: 'Dragostea Din Tei',
+    artist: 'O-Zone',
+    url: '/sound/O-Zone - Dragostea Din Tei.mp3',
   },
-  
-  // 🎵 INNE HITY 2000s
+
   {
-    title: "Bring Me to Life",
-    artist: "Evanescence",
-    url: "/sound/evanescence_bring_me_to_life.mp3"
-  },
-  {
-    title: "Butterfly",
-    artist: "Crazy Town", 
-    url: "/sound/crazy_town_butterfly.mp3"
+    title: 'Butterfly',
+    artist: 'Crazy Town',
+    url: '/sound/crazy_town_butterfly.mp3',
   },
   {
-    title: "Hot in Herre",
-    artist: "Nelly",
-    url: "/sound/nelly_hot_in_herre.mp3"
+    title: 'Hot in Herre',
+    artist: 'Nelly',
+    url: '/sound/nelly_hot_in_herre.mp3',
   },
   {
-    title: "Complicated",
-    artist: "Avril Lavigne",
-    url: "/sound/avril_complicated.mp3"
+    title: 'Complicated',
+    artist: 'Avril Lavigne',
+    url: '/sound/avril_complicated.mp3',
   },
   {
-    title: "Żeby Polska",
-    artist: "Blog 27",
-    url: "/sound/blog27_zeby_polska.mp3"
-  }
+    title: 'Żeby Polska',
+    artist: 'Blog 27',
+    url: '/sound/blog27_zeby_polska.mp3',
+  },
 ];
 
 export default function WinampWindow({ onClose }: WinampWindowProps) {
@@ -114,7 +84,7 @@ export default function WinampWindow({ onClose }: WinampWindowProps) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  
+
   // Stan okien
   const [showPlaylist, setShowPlaylist] = useState(true);
 
@@ -171,13 +141,13 @@ export default function WinampWindow({ onClose }: WinampWindowProps) {
   }
 
   function handleClosePlayer() {
-    console.log("Closing Winamp player"); // Debug log
+    console.log('Closing Winamp player'); // Debug log
     setShowPlaylist(false);
     onClose(); // ✅ To wywołuje handleCloseApp('winamp') w DesktopIcons
   }
 
   function handleClosePlaylist() {
-    console.log("Closing Winamp playlist"); // Debug log
+    console.log('Closing Winamp playlist'); // Debug log
     setShowPlaylist(false);
   }
 

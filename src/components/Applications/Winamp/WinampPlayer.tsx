@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from 'react';
 
 interface Track {
   title: string;
@@ -35,18 +35,31 @@ export default function WinampPlayer({
   onTimeUpdate,
   onLoadedMetadata,
   onTrackEnded,
-  onClose
+  onClose,
 }: WinampPlayerProps) {
-  
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [volume, setVolume] = useState(75);
+  const [scrollPosition, setScrollPosition] = useState(0);
 
-  // Format czasu
+  // Format time display
   function formatTime(seconds: number) {
-    if (isNaN(seconds)) return "00:00";
+    if (isNaN(seconds)) return '0:00';
     const m = Math.floor(seconds / 60);
     const s = Math.floor(seconds % 60);
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    return `${m}:${s.toString().padStart(2, '0')}`;
   }
+
+  // Scrolling text effect
+  useEffect(() => {
+    if (!currentTrack || !isPlaying) return;
+
+    const text = `*** ${currentTrack.artist} - ${currentTrack.title} ***  `;
+    const interval = setInterval(() => {
+      setScrollPosition((prev) => (prev + 1) % (text.length * 8));
+    }, 200);
+
+    return () => clearInterval(interval);
+  }, [currentTrack, isPlaying]);
 
   // Audio event handlers
   function handleLoadedMetadata() {
@@ -61,119 +74,211 @@ export default function WinampPlayer({
     }
   }
 
-  // Auto-load przy zmianie utworu
+  // Auto-load on track change
   useEffect(() => {
     if (audioRef.current && currentTrack) {
       audioRef.current.load();
       if (isPlaying) {
-        audioRef.current.play().catch(err => {
-          console.log("Autoplay blocked:", err);
+        audioRef.current.play().catch((err) => {
+          console.log('Autoplay blocked:', err);
         });
       }
     }
-  }, [currentTrack, isPlaying]); // ✅ Dodano isPlaying
+  }, [currentTrack, isPlaying]);
 
   // Play/Pause sync
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current.play().catch(err => console.log("Play error:", err));
+        audioRef.current.play().catch((err) => console.log('Play error:', err));
       } else {
         audioRef.current.pause();
       }
     }
   }, [isPlaying]);
 
+  // Volume control
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100;
+    }
+  }, [volume]);
+
+  const trackText = currentTrack
+    ? `*** ${currentTrack.artist} - ${currentTrack.title} ***  `
+    : '*** Winamp *** Press Play ***  ';
+
   return (
     <div style={playerContainerStyle}>
-      {/* Title Bar */}
+      {/* TITLE BAR */}
       <div style={titleBarStyle}>
         <div style={titleTextStyle}>
-          <span style={winampLogoStyle}>Winamp</span>
-          <span style={versionStyle}>2.95</span>
+          <span style={{ color: '#00FF00' }}>█</span>
+          <span>Winamp</span>
         </div>
         <div style={titleButtonsStyle}>
-          <button style={titleBtnStyle}>_</button>
-          <button style={titleBtnStyle}>□</button>
-          <button style={titleBtnStyle} onClick={onClose}>✕</button>
+          <button style={titleBtnStyle} title="Minimize">
+            _
+          </button>
+          <button style={titleBtnStyle} title="Shade">
+            ▴
+          </button>
+          <button style={titleBtnStyle} onClick={onClose} title="Close">
+            ✕
+          </button>
         </div>
       </div>
 
-      {/* Main Display */}
-      <div style={mainDisplayStyle}>
-        {/* Left Side - Time Display */}
-        <div style={timeDisplayStyle}>
-          <div style={digitalDisplayStyle}>
-            {formatTime(currentTime)}
+      {/* MAIN DISPLAY AREA */}
+      <div style={mainAreaStyle}>
+        {/* CLUTTERBAR (Top section with monstereo/shuffle/repeat) */}
+        <div style={clutterbarStyle}>
+          <div style={clutterButtonStyle}>O</div>
+          <div style={clutterButtonStyle}>A</div>
+          <div style={clutterButtonStyle}>I</div>
+          <div style={clutterButtonStyle}>D</div>
+          <div style={clutterButtonStyle}>V</div>
+          <div style={{ flex: 1 }} />
+          <div style={clutterButtonStyle}>STEREO</div>
+        </div>
+
+        {/* DISPLAY WINDOW */}
+        <div style={displayWindowStyle}>
+          {/* Visualizer */}
+          <div style={visualizerStyle}>
+            {[...Array(16)].map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  ...visualizerBarStyle,
+                  height: isPlaying ? `${Math.random() * 100}%` : '2px',
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Time Display */}
+          <div style={timeDisplayStyle}>
+            <span style={digitStyle}>{formatTime(currentTime)}</span>
+          </div>
+
+          {/* Track Info Scrolling */}
+          <div style={trackInfoContainerStyle}>
+            <div
+              style={{
+                ...trackInfoScrollStyle,
+                transform: `translateX(-${scrollPosition}px)`,
+              }}
+            >
+              {trackText.repeat(3)}
+            </div>
+          </div>
+
+          {/* Kbps / KHz Display */}
+          <div style={bitrateDisplayStyle}>
+            <div style={smallDigitStyle}>128</div>
+            <div style={smallDigitStyle}>44</div>
           </div>
         </div>
 
-        {/* Center - Track Info */}
-        <div style={trackInfoStyle}>
-          <div style={scrollingTextStyle}>
-            {currentTrack 
-              ? `${currentTrack.artist} - ${currentTrack.title}`
-              : "Winamp *** Please select a file *** Winamp"
-            }
+        {/* SPECTRUM ANALYZER */}
+        <div style={spectrumStyle}>
+          {[...Array(75)].map((_, i) => {
+            const height = isPlaying ? Math.random() * 10 : 0;
+            const color = height > 7 ? '#FF0000' : height > 4 ? '#FFFF00' : '#00FF00';
+            return (
+              <div
+                key={i}
+                style={{
+                  width: 2,
+                  height: height,
+                  backgroundColor: color,
+                  alignSelf: 'flex-end',
+                }}
+              />
+            );
+          })}
+        </div>
+
+        {/* PROGRESS BAR (SEEK BAR) */}
+        <div style={seekBarContainerStyle}>
+          <div style={seekBarStyle}>
+            <div
+              style={{
+                ...seekBarFillStyle,
+                width: duration > 0 ? `${(currentTime / duration) * 100}%` : '0%',
+              }}
+            />
           </div>
         </div>
 
-        {/* Right Side - Kbps/kHz */}
-        <div style={infoDisplayStyle}>
-          <div style={digitalDisplayStyle}>128</div>
-          <div style={digitalDisplayStyle}>44</div>
-        </div>
-      </div>
+        {/* CONTROL BUTTONS */}
+        <div style={controlsRowStyle}>
+          <div style={controlsLeftStyle}>
+            <button style={controlBtnStyle} onClick={onPrev} title="Previous">
+              ⏮
+            </button>
+            <button style={controlBtnStyle} onClick={onPlay} title="Play">
+              ▶
+            </button>
+            <button style={controlBtnStyle} onClick={onPause} title="Pause">
+              ⏸
+            </button>
+            <button style={controlBtnStyle} onClick={onStop} title="Stop">
+              ⏹
+            </button>
+            <button style={controlBtnStyle} onClick={onNext} title="Next">
+              ⏭
+            </button>
+            <button style={controlBtnMiniStyle} title="Eject">
+              ⏏
+            </button>
+          </div>
 
-      {/* Progress Bar */}
-      <div style={progressSectionStyle}>
-        <div style={progressBarContainerStyle}>
-          <div 
-            style={{
-              ...progressBarStyle,
-              width: duration > 0 ? `${(currentTime / duration) * 100}%` : '0%'
-            }} 
-          />
-          <div style={progressHandleStyle} />
-        </div>
-      </div>
+          {/* VOLUME SLIDER */}
+          <div style={volumeSliderContainerStyle}>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={volume}
+              onChange={(e) => setVolume(Number(e.target.value))}
+              style={volumeSliderStyle}
+              title={`Volume: ${volume}%`}
+            />
+          </div>
 
-      {/* Controls */}
-      <div style={controlsStyle}>
-        <button style={controlBtnStyle} onClick={onPrev} title="Previous">⏮</button>
-        <button style={controlBtnStyle} onClick={onPlay} title="Play">▶</button>
-        <button style={controlBtnStyle} onClick={onPause} title="Pause">⏸</button>
-        <button style={controlBtnStyle} onClick={onStop} title="Stop">⏹</button>
-        <button style={controlBtnStyle} onClick={onNext} title="Next">⏭</button>
-      </div>
-
-      {/* Volume & Balance */}
-      <div style={volumeSectionStyle}>
-        <div style={volumeControlStyle}>
-          <span>Volume</span>
-          <div style={sliderStyle}>
-            <div style={sliderHandleStyle} />
+          {/* BALANCE SLIDER */}
+          <div style={balanceSliderContainerStyle}>
+            <input
+              type="range"
+              min="-100"
+              max="100"
+              defaultValue="0"
+              style={balanceSliderStyle}
+              title="Balance"
+            />
           </div>
         </div>
-        <div style={balanceControlStyle}>
-          <span>Balance</span>
-          <div style={sliderStyle}>
-            <div style={sliderHandleStyle} />
-          </div>
-        </div>
-      </div>
 
-      {/* Bottom Buttons */}
-      <div style={bottomButtonsStyle}>
-        <button style={bottomBtnStyle}>EQ</button>
-        <button style={bottomBtnStyle}>PL</button>
-        <button style={bottomBtnStyle}>ML</button>
+        {/* BOTTOM BUTTONS */}
+        <div style={bottomButtonsStyle}>
+          <button style={bottomBtnStyle} title="Equalizer">
+            EQ
+          </button>
+          <button style={bottomBtnStyle} title="Playlist">
+            PL
+          </button>
+          <button style={bottomBtnStyle} title="Media Library">
+            ML
+          </button>
+        </div>
       </div>
 
       {/* Hidden Audio Element */}
       <audio
         ref={audioRef}
-        src={currentTrack ? currentTrack.url : ""}
+        src={currentTrack ? currentTrack.url : ''}
         onLoadedMetadata={handleLoadedMetadata}
         onTimeUpdate={handleTimeUpdate}
         onEnded={onTrackEnded}
@@ -183,198 +288,268 @@ export default function WinampPlayer({
   );
 }
 
-// STYLES - Oryginalny Winamp wygląd
+// STYLES - Classic Winamp Skin
 const playerContainerStyle: React.CSSProperties = {
-  position: "fixed",
-  top: 100,
-  left: 100,
+  position: 'fixed',
+  top: 60,
+  left: 60,
   width: 275,
-  height: 116,
-  backgroundColor: "#C0C0C0",
-  border: "2px outset #C0C0C0",
-  fontFamily: "Tahoma, Arial, sans-serif",
-  fontSize: "8px",
-  userSelect: "none",
-  zIndex: 10000
+  background: 'linear-gradient(180deg, #6B7C99 0%, #3D4C63 50%, #2A3747 100%)',
+  border: '2px solid #000',
+  borderRadius: 2,
+  fontFamily: 'Arial, sans-serif',
+  userSelect: 'none',
+  zIndex: 9999,
+  boxShadow: '2px 2px 8px rgba(0,0,0,0.5)',
 };
 
 const titleBarStyle: React.CSSProperties = {
-  height: "14px",
-  background: "linear-gradient(to bottom, #0050A0, #003875)",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  padding: "0 2px",
-  cursor: "move"
+  height: 14,
+  background: 'linear-gradient(180deg, #4A5F7F 0%, #2F3E52 100%)',
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: '0 4px',
+  borderBottom: '1px solid #000',
+  cursor: 'move',
 };
 
 const titleTextStyle: React.CSSProperties = {
-  color: "white",
-  fontSize: "8px",
-  display: "flex",
-  gap: "4px"
-};
-
-const winampLogoStyle: React.CSSProperties = {
-  fontWeight: "bold"
-};
-
-const versionStyle: React.CSSProperties = {
-  color: "#FFD700"
+  color: '#D0D8E0',
+  fontSize: 9,
+  fontWeight: 'bold',
+  display: 'flex',
+  alignItems: 'center',
+  gap: 3,
 };
 
 const titleButtonsStyle: React.CSSProperties = {
-  display: "flex",
-  gap: "1px"
+  display: 'flex',
+  gap: 2,
 };
 
 const titleBtnStyle: React.CSSProperties = {
-  width: "12px",
-  height: "9px",
-  fontSize: "6px",
-  border: "1px outset #C0C0C0",
-  backgroundColor: "#C0C0C0",
-  cursor: "pointer",
-  padding: "0"
+  width: 9,
+  height: 9,
+  fontSize: 7,
+  backgroundColor: '#2F3E52',
+  color: '#D0D8E0',
+  border: '1px solid #1A2332',
+  cursor: 'pointer',
+  padding: 0,
+  lineHeight: '7px',
 };
 
-const mainDisplayStyle: React.CSSProperties = {
-  height: "20px",
-  backgroundColor: "#000",
-  display: "flex",
-  alignItems: "center",
-  margin: "4px",
-  border: "1px inset #808080"
+const mainAreaStyle: React.CSSProperties = {
+  padding: '4px 8px 8px 8px',
+};
+
+const clutterbarStyle: React.CSSProperties = {
+  height: 10,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 2,
+  marginBottom: 2,
+  fontSize: 7,
+};
+
+const clutterButtonStyle: React.CSSProperties = {
+  width: 12,
+  height: 10,
+  fontSize: 6,
+  backgroundColor: '#1A2332',
+  color: '#7F8FA0',
+  border: '1px solid #0F1419',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  cursor: 'pointer',
+};
+
+const displayWindowStyle: React.CSSProperties = {
+  height: 26,
+  backgroundColor: '#0A0F14',
+  border: '2px solid #1A2332',
+  display: 'flex',
+  alignItems: 'center',
+  padding: '2px 4px',
+  gap: 4,
+  marginBottom: 4,
+};
+
+const visualizerStyle: React.CSSProperties = {
+  width: 76,
+  height: 16,
+  backgroundColor: '#000',
+  display: 'flex',
+  alignItems: 'flex-end',
+  gap: 1,
+  padding: 1,
+};
+
+const visualizerBarStyle: React.CSSProperties = {
+  width: 3,
+  backgroundColor: '#00FF00',
+  transition: 'height 0.1s ease',
 };
 
 const timeDisplayStyle: React.CSSProperties = {
-  width: "60px",
-  textAlign: "center"
+  width: 50,
+  height: 16,
+  backgroundColor: '#000',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 };
 
-const digitalDisplayStyle: React.CSSProperties = {
-  color: "#00FF00",
-  fontFamily: "monospace",
-  fontSize: "11px",
-  fontWeight: "bold"
+const digitStyle: React.CSSProperties = {
+  color: '#00FF41',
+  fontSize: 13,
+  fontFamily: 'monospace',
+  fontWeight: 'bold',
+  letterSpacing: 1,
 };
 
-const trackInfoStyle: React.CSSProperties = {
+const trackInfoContainerStyle: React.CSSProperties = {
   flex: 1,
-  overflow: "hidden",
-  padding: "0 4px"
+  height: 16,
+  backgroundColor: '#000',
+  overflow: 'hidden',
+  position: 'relative',
 };
 
-const scrollingTextStyle: React.CSSProperties = {
-  color: "#00FF00",
-  fontSize: "8px",
-  whiteSpace: "nowrap"
+const trackInfoScrollStyle: React.CSSProperties = {
+  color: '#00FF41',
+  fontSize: 9,
+  fontWeight: 'bold',
+  whiteSpace: 'nowrap',
+  position: 'absolute',
+  transition: 'transform 0.2s linear',
+  lineHeight: '16px',
 };
 
-const infoDisplayStyle: React.CSSProperties = {
-  width: "40px",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  fontSize: "6px"
+const bitrateDisplayStyle: React.CSSProperties = {
+  width: 28,
+  height: 16,
+  backgroundColor: '#000',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: 1,
 };
 
-const progressSectionStyle: React.CSSProperties = {
-  padding: "4px 8px"
+const smallDigitStyle: React.CSSProperties = {
+  color: '#00FF41',
+  fontSize: 7,
+  fontFamily: 'monospace',
+  fontWeight: 'bold',
 };
 
-const progressBarContainerStyle: React.CSSProperties = {
-  width: "100%",
-  height: "10px",
-  backgroundColor: "#404040",
-  border: "1px inset #808080",
-  position: "relative",
-  cursor: "pointer"
+const spectrumStyle: React.CSSProperties = {
+  height: 12,
+  backgroundColor: '#000',
+  border: '2px solid #1A2332',
+  display: 'flex',
+  alignItems: 'flex-end',
+  gap: 0,
+  padding: '1px 2px',
+  marginBottom: 4,
 };
 
-const progressBarStyle: React.CSSProperties = {
-  height: "100%",
-  backgroundColor: "#008000",
-  transition: "width 0.1s ease"
+const seekBarContainerStyle: React.CSSProperties = {
+  marginBottom: 6,
 };
 
-const progressHandleStyle: React.CSSProperties = {
-  position: "absolute",
-  right: "0",
-  top: "0",
-  width: "8px",
-  height: "10px",
-  backgroundColor: "#C0C0C0",
-  border: "1px outset #C0C0C0",
-  cursor: "grab"
+const seekBarStyle: React.CSSProperties = {
+  width: '100%',
+  height: 10,
+  backgroundColor: '#1A2332',
+  border: '1px solid #0F1419',
+  position: 'relative',
+  cursor: 'pointer',
 };
 
-const controlsStyle: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "center",
-  gap: "2px",
-  padding: "4px"
+const seekBarFillStyle: React.CSSProperties = {
+  height: '100%',
+  background: 'linear-gradient(180deg, #5FB75F 0%, #3A8A3A 100%)',
+  transition: 'width 0.1s ease',
+};
+
+const controlsRowStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+  marginBottom: 6,
+};
+
+const controlsLeftStyle: React.CSSProperties = {
+  display: 'flex',
+  gap: 2,
 };
 
 const controlBtnStyle: React.CSSProperties = {
-  width: "23px",
-  height: "18px",
-  border: "1px outset #C0C0C0",
-  backgroundColor: "#C0C0C0",
-  cursor: "pointer",
-  fontSize: "8px"
+  width: 23,
+  height: 18,
+  backgroundColor: '#3D4C63',
+  border: '1px solid #1A2332',
+  borderRadius: 2,
+  cursor: 'pointer',
+  fontSize: 10,
+  color: '#D0D8E0',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 };
 
-const volumeSectionStyle: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "space-between",
-  padding: "2px 8px",
-  fontSize: "6px"
+const controlBtnMiniStyle: React.CSSProperties = {
+  width: 22,
+  height: 16,
+  backgroundColor: '#3D4C63',
+  border: '1px solid #1A2332',
+  borderRadius: 2,
+  cursor: 'pointer',
+  fontSize: 9,
+  color: '#D0D8E0',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 };
 
-const volumeControlStyle: React.CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  gap: "4px"
+const volumeSliderContainerStyle: React.CSSProperties = {
+  flex: 1,
 };
 
-const balanceControlStyle: React.CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  gap: "4px"
+const volumeSliderStyle: React.CSSProperties = {
+  width: '100%',
+  height: 8,
+  cursor: 'pointer',
 };
 
-const sliderStyle: React.CSSProperties = {
-  width: "50px",
-  height: "8px",
-  backgroundColor: "#404040",
-  border: "1px inset #808080",
-  position: "relative"
+const balanceSliderContainerStyle: React.CSSProperties = {
+  width: 40,
 };
 
-const sliderHandleStyle: React.CSSProperties = {
-  position: "absolute",
-  left: "50%",
-  top: "0",
-  width: "6px",
-  height: "8px",
-  backgroundColor: "#C0C0C0",
-  border: "1px outset #C0C0C0",
-  cursor: "grab"
+const balanceSliderStyle: React.CSSProperties = {
+  width: '100%',
+  height: 8,
+  cursor: 'pointer',
 };
 
 const bottomButtonsStyle: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "center",
-  gap: "2px",
-  padding: "2px"
+  display: 'flex',
+  justifyContent: 'center',
+  gap: 4,
 };
 
 const bottomBtnStyle: React.CSSProperties = {
-  width: "22px",
-  height: "12px",
-  fontSize: "6px",
-  border: "1px outset #C0C0C0",
-  backgroundColor: "#C0C0C0",
-  cursor: "pointer"
+  width: 22,
+  height: 12,
+  fontSize: 7,
+  fontWeight: 'bold',
+  backgroundColor: '#3D4C63',
+  color: '#D0D8E0',
+  border: '1px solid #1A2332',
+  borderRadius: 2,
+  cursor: 'pointer',
 };

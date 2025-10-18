@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+  <head>
+    <title>BootScreen Test</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: sans-serif;
+      }
+      #screen {
+        width: 100vw;
+        height: 100vh;
+        background: linear-gradient(to bottom, #245edb 0%, #1941a5 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+      #progress-container {
+        width: 300px;
+      }
+      #progress-bar {
+        width: 100%;
+        height: 20px;
+        background: #333;
+        border: 1px solid #666;
+        margin-bottom: 10px;
+      }
+      #progress-fill {
+        height: 100%;
+        background: linear-gradient(to right, #4488ff, #66aaff);
+        width: 0%;
+        transition: width 0.1s;
+      }
+      #text {
+        font-size: 18px;
+        display: none;
+      }
+      #log {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: rgba(0, 0, 0, 0.8);
+        padding: 10px;
+        font-size: 12px;
+        font-family: monospace;
+        max-width: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="screen">
+      <h1>BootScreen Test</h1>
+      <div id="progress-container">
+        <div id="progress-bar">
+          <div id="progress-fill"></div>
+        </div>
+        <div id="percent">0%</div>
+      </div>
+      <div id="text">Uruchamianie Windows...</div>
+    </div>
+
+    <div id="log"></div>
+
+    <script>
+      const progressFill = document.getElementById('progress-fill');
+      const percentText = document.getElementById('percent');
+      const textDiv = document.getElementById('text');
+      const logDiv = document.getElementById('log');
+      const progressContainer = document.getElementById('progress-container');
+
+      function log(msg) {
+        const time = new Date().toLocaleTimeString();
+        logDiv.innerHTML += `${time}: ${msg}<br>`;
+        console.log(msg);
+      }
+
+      log('🚀 START - useEffect uruchomiony');
+
+      const startTime = Date.now();
+      const loadingDuration = 5000;
+
+      // Progress interval
+      const progressInterval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min((elapsed / loadingDuration) * 100, 100);
+        progressFill.style.width = progress + '%';
+        percentText.textContent = Math.floor(progress) + '%';
+
+        if (progress >= 100) {
+          clearInterval(progressInterval);
+          log('⏸️ Pasek doszedł do 100%');
+        }
+      }, 50);
+
+      // Timer 1: Po 5s ustaw 100%
+      setTimeout(() => {
+        clearInterval(progressInterval);
+        progressFill.style.width = '100%';
+        percentText.textContent = '100%';
+        log('✅ Timer 5000ms: Pasek na 100%');
+      }, 5000);
+
+      // Timer 2: Po 5.5s pokaż tekst
+      setTimeout(() => {
+        progressContainer.style.display = 'none';
+        textDiv.style.display = 'block';
+        log('📝 Timer 5500ms: Pokazuję tekst');
+      }, 5500);
+
+      // Timer 3: Po 7.5s finish
+      setTimeout(() => {
+        log('🎯 Timer 7500ms: FINISH - przejście dalej');
+        document.body.style.background = '#00ff00';
+        textDiv.textContent = 'SUKCES! Pasek działał przez pełne 5 sekund!';
+      }, 7500);
+    </script>
+  </body>
+</html>
