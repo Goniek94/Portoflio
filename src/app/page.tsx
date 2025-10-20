@@ -127,8 +127,7 @@ export default function Home() {
   /* ---------- render ---------- */
   return (
     <div className="w-full h-screen overflow-hidden relative bg-black">
-      {/* Zawsze renderuj wszystkie fazy, kontroluj tylko opacity */}
-      {/* BootScreen - renderuj tylko gdy currentPhase = 'boot' (bez previousPhase!) */}
+      {/* BootScreen */}
       {state.currentPhase === 'boot' && (
         <div
           className="absolute inset-0"
@@ -141,7 +140,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* WelcomeScreen - renderuj tylko gdy potrzebny */}
+      {/* WelcomeScreen */}
       {state.currentPhase === 'welcome' && (
         <div
           className="absolute inset-0"
@@ -154,7 +153,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* Desktop - renderuj tylko gdy faktycznie potrzebny (unikamy startowania timera za wcześnie) */}
+      {/* Desktop */}
       {state.currentPhase === 'desktop' && (
         <div
           className="absolute inset-0"
@@ -169,16 +168,21 @@ export default function Home() {
         </div>
       )}
 
+      {/* Glitch */}
       {state.currentPhase === 'glitch' && (
         <div className="absolute inset-0 z-40">
           <GlitchOverlay onFinish={handleGlitchFinish} />
         </div>
       )}
+
+      {/* Warning */}
       {state.currentPhase === 'warning' && (
         <div className="absolute inset-0 z-40">
           <Warning onFinish={handleWarningFinish} />
         </div>
       )}
+
+      {/* Folders */}
       {state.currentPhase === 'folders' && (
         <div className="absolute inset-0 z-40">
           <Folders onFinish={handleFoldersFinish} />

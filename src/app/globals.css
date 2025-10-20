@@ -32,3 +32,42 @@ body {
   height: 100vh;
   width: 100vw;
 }
+
+/* Windows XP Notepad Scrollbar */
+.notepad-content::-webkit-scrollbar {
+  width: 16px;
+  background-color: #f0f0f0;
+}
+
+.notepad-content::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+  border-left: 1px solid #c0c0c0;
+}
+
+.notepad-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(to right, #e0e0e0, #c0c0c0);
+  border: 1px outset #d0d0d0;
+  border-radius: 1px;
+}
+
+.notepad-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to right, #d0d0d0, #b0b0b0);
+}
+
+.notepad-content::-webkit-scrollbar-button {
+  height: 16px;
+  background-color: #e0e0e0;
+  border: 1px outset #d0d0d0;
+}
+
+.notepad-content::-webkit-scrollbar-button:vertical:decrement {
+  background: #e0e0e0
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M8 6 L12 10 L4 10 Z" fill="%23000"/></svg>')
+    center no-repeat;
+}
+
+.notepad-content::-webkit-scrollbar-button:vertical:increment {
+  background: #e0e0e0
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M8 10 L12 6 L4 6 Z" fill="%23000"/></svg>')
+    center no-repeat;
+}
