@@ -74,28 +74,55 @@ export default function WinampPlayer({
     }
   }
 
-  // Auto-load on track change
+  // Load and play track when it changes or when isPlaying changes
   useEffect(() => {
-    if (audioRef.current && currentTrack) {
-      audioRef.current.load();
-      if (isPlaying) {
-        audioRef.current.play().catch((err) => {
-          console.log('Autoplay blocked:', err);
+    const audio = audioRef.current;
+    if (!audio || !currentTrack) return;
+
+    // Build full URL with encoding for special characters
+    const trackPath = currentTrack.url.startsWith('http') ? currentTrack.url : currentTrack.url;
+
+    // Encode the URL to handle spaces and special characters
+    const parts = trackPath.split('/');
+    const encodedParts = parts.map((part, index) =>
+      index === parts.length - 1 ? encodeURIComponent(part) : part
+    );
+    const encodedPath = encodedParts.join('/');
+
+    const newSrc = trackPath.startsWith('http') ? trackPath : window.location.origin + encodedPath;
+
+    // Only reload if it's a different track
+    const currentSrc = audio.src;
+    if (currentSrc !== newSrc) {
+      console.log('Loading track:', newSrc);
+      audio.src = newSrc;
+      audio.load();
+    }
+
+    // Handle playback
+    if (isPlaying) {
+      const attemptPlay = () => {
+        console.log('Attempting to play...');
+        audio.play().catch((err) => {
+          console.error('Play error:', err);
+          console.log('Audio readyState:', audio.readyState);
+          console.log('Audio src:', audio.src);
         });
+      };
+
+      // If audio is ready, play immediately
+      if (audio.readyState >= 2) {
+        attemptPlay();
+      } else {
+        // Otherwise wait for it to be ready
+        console.log('Waiting for audio to be ready...');
+        audio.addEventListener('canplay', attemptPlay, { once: true });
+        return () => audio.removeEventListener('canplay', attemptPlay);
       }
+    } else {
+      audio.pause();
     }
   }, [currentTrack, isPlaying]);
-
-  // Play/Pause sync
-  useEffect(() => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.play().catch((err) => console.log('Play error:', err));
-      } else {
-        audioRef.current.pause();
-      }
-    }
-  }, [isPlaying]);
 
   // Volume control
   useEffect(() => {
@@ -290,17 +317,11 @@ export default function WinampPlayer({
 
 // STYLES - Classic Winamp Skin
 const playerContainerStyle: React.CSSProperties = {
-  position: 'fixed',
-  top: 60,
-  left: 60,
   width: 275,
+  height: '100%',
   background: 'linear-gradient(180deg, #6B7C99 0%, #3D4C63 50%, #2A3747 100%)',
-  border: '2px solid #000',
-  borderRadius: 2,
   fontFamily: 'Arial, sans-serif',
   userSelect: 'none',
-  zIndex: 9999,
-  boxShadow: '2px 2px 8px rgba(0,0,0,0.5)',
 };
 
 const titleBarStyle: React.CSSProperties = {
@@ -311,7 +332,6 @@ const titleBarStyle: React.CSSProperties = {
   alignItems: 'center',
   padding: '0 4px',
   borderBottom: '1px solid #000',
-  cursor: 'move',
 };
 
 const titleTextStyle: React.CSSProperties = {

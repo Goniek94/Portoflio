@@ -30,9 +30,8 @@ const DEFAULT_ICONS: IconData[] = [
 ];
 
 const PORTFOLIO_ICONS: IconData[] = [
-  { id: 101, label: 'CV.exe', src: '/images/document-icon.png', x: 386, y: 32 },
-  { id: 102, label: 'Projekty.sys', src: '/images/folder-icon.png', x: 386, y: 140 },
-  { id: 103, label: 'O_mnie.dll', src: '/images/profile-icon.png', x: 386, y: 248 },
+  { id: 101, label: 'About_Me.txt', src: '/images/document-icon.png', x: 386, y: 32 },
+  { id: 102, label: 'Projects.txt', src: '/images/folder-icon.png', x: 386, y: 140 },
 ];
 
 export default function DesktopIcons({
@@ -90,9 +89,9 @@ export default function DesktopIcons({
 
   /* ----------  EMOJI MAPPER Z FALLBACKIEM ---------- */
   function getIconEmoji(label: string): string {
+    if (label.includes('About') || label.includes('mnie')) return '👤';
+    if (label.includes('Project') || label.includes('Projekt')) return '📁';
     if (label.includes('CV')) return '📄';
-    if (label.includes('Projekt')) return '📁';
-    if (label.includes('mnie')) return '👤';
     if (label.includes('Gadu')) return '💬';
     if (label.includes('Counter')) return '🎯';
     if (label.includes('Internet')) return '🌐';

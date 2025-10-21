@@ -160,18 +160,11 @@ export default function WinampPlaylist({
 
 // STYLES - Classic Winamp Playlist
 const playlistContainerStyle: React.CSSProperties = {
-  position: 'fixed',
-  top: 60,
-  left: 350,
-  width: 275,
-  height: 232,
+  width: '100%',
+  height: '100%',
   background: 'linear-gradient(180deg, #6B7C99 0%, #3D4C63 50%, #2A3747 100%)',
-  border: '2px solid #000',
-  borderRadius: 2,
   fontFamily: 'Arial, sans-serif',
   userSelect: 'none',
-  zIndex: 9998,
-  boxShadow: '2px 2px 8px rgba(0,0,0,0.5)',
   display: 'flex',
   flexDirection: 'column',
 };
@@ -184,7 +177,6 @@ const titleBarStyle: React.CSSProperties = {
   alignItems: 'center',
   padding: '0 4px',
   borderBottom: '1px solid #000',
-  cursor: 'move',
 };
 
 const titleTextStyle: React.CSSProperties = {

@@ -61,15 +61,15 @@ export function useWindowManager() {
 
   // Otwórz nowe okno
   const openWindow = (config: WindowConfig) => {
-    const existingWindow = windows.find(w => w.id === config.id);
+    const existingWindow = windows.find((w) => w.id === config.id);
     if (existingWindow) {
       // Jeśli okno już istnieje, przywróć je i przenieś na wierzch
-      updateWindow(config.id, { 
-        isMinimized: false, 
+      updateWindow(config.id, {
+        isMinimized: false,
         isVisible: true,
-        zIndex: nextZIndex 
+        zIndex: nextZIndex,
       });
-      setNextZIndex(prev => prev + 1);
+      setNextZIndex((prev) => prev + 1);
       return;
     }
 
@@ -82,35 +82,33 @@ export function useWindowManager() {
       defaultPosition: config.defaultPosition,
       resizable: config.resizable ?? true,
       minimizable: config.minimizable ?? true,
-      maximizable: config.maximizable ?? (config.type !== 'fullscreen'),
+      maximizable: config.maximizable ?? config.type !== 'fullscreen',
       isMinimized: false,
       isMaximized: config.type === 'fullscreen',
       isVisible: true,
       zIndex: nextZIndex,
       currentSize: config.defaultSize,
-      currentPosition: config.defaultPosition
+      currentPosition: config.defaultPosition,
     };
 
-    setWindows(prev => [...prev, newWindow]);
-    setNextZIndex(prev => prev + 1);
+    setWindows((prev) => [...prev, newWindow]);
+    setNextZIndex((prev) => prev + 1);
   };
 
   // Aktualizuj okno
   const updateWindow = (windowId: string, updates: Partial<WindowState>) => {
-    setWindows(prev => prev.map(w => 
-      w.id === windowId ? { ...w, ...updates } : w
-    ));
+    setWindows((prev) => prev.map((w) => (w.id === windowId ? { ...w, ...updates } : w)));
   };
 
   // Zamknij okno
   const closeWindow = (windowId: string) => {
-    setWindows(prev => prev.filter(w => w.id !== windowId));
+    setWindows((prev) => prev.filter((w) => w.id !== windowId));
   };
 
   // Przenieś okno na wierzch
   const focusWindow = (windowId: string) => {
     updateWindow(windowId, { zIndex: nextZIndex });
-    setNextZIndex(prev => prev + 1);
+    setNextZIndex((prev) => prev + 1);
   };
 
   return {
@@ -118,19 +116,19 @@ export function useWindowManager() {
     openWindow,
     updateWindow,
     closeWindow,
-    focusWindow
+    focusWindow,
   };
 }
 
 // Pojedyncze okno
-function DraggableWindow({ 
-  window, 
-  onUpdate, 
-  onClose, 
-  onMinimize, 
-  onMaximize, 
+function DraggableWindow({
+  window,
+  onUpdate,
+  onClose,
+  onMinimize,
+  onMaximize,
   onFocus,
-  children 
+  children,
 }: DraggableWindowProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -139,12 +137,12 @@ function DraggableWindow({
   // Drag handlers
   const handleMouseDown = (e: React.MouseEvent) => {
     if (window.isMaximized) return;
-    
+
     if (windowRef.current) {
       const rect = windowRef.current.getBoundingClientRect();
       setDragOffset({
         x: e.clientX - rect.left,
-        y: e.clientY - rect.top
+        y: e.clientY - rect.top,
       });
       setIsDragging(true);
       onFocus();
@@ -155,14 +153,24 @@ function DraggableWindow({
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (isDragging && !window.isMaximized) {
-        const screenWidth = typeof globalThis !== 'undefined' && globalThis.innerWidth ? globalThis.innerWidth : 1920;
-        const screenHeight = typeof globalThis !== 'undefined' && globalThis.innerHeight ? globalThis.innerHeight : 1080;
-        
-        const newX = Math.max(0, Math.min(screenWidth - window.currentSize.width, e.clientX - dragOffset.x));
-        const newY = Math.max(0, Math.min(screenHeight - window.currentSize.height - 30, e.clientY - dragOffset.y));
-        
-        onUpdate({ 
-          currentPosition: { x: newX, y: newY }
+        const screenWidth =
+          typeof globalThis !== 'undefined' && globalThis.innerWidth ? globalThis.innerWidth : 1920;
+        const screenHeight =
+          typeof globalThis !== 'undefined' && globalThis.innerHeight
+            ? globalThis.innerHeight
+            : 1080;
+
+        const newX = Math.max(
+          0,
+          Math.min(screenWidth - window.currentSize.width, e.clientX - dragOffset.x)
+        );
+        const newY = Math.max(
+          0,
+          Math.min(screenHeight - window.currentSize.height - 30, e.clientY - dragOffset.y)
+        );
+
+        onUpdate({
+          currentPosition: { x: newX, y: newY },
         });
       }
     };
@@ -192,7 +200,7 @@ function DraggableWindow({
       height: '100vh',
       zIndex: window.zIndex,
       backgroundColor: '#000',
-      overflow: 'hidden'
+      overflow: 'hidden',
     };
 
     return (
@@ -219,7 +227,7 @@ function DraggableWindow({
     userSelect: 'none',
     display: 'flex',
     flexDirection: 'column',
-    boxShadow: window.isMaximized ? 'none' : '2px 2px 8px rgba(0,0,0,0.3)'
+    boxShadow: window.isMaximized ? 'none' : '2px 2px 8px rgba(0,0,0,0.3)',
   };
 
   const titleBarStyle: React.CSSProperties = {
@@ -231,7 +239,7 @@ function DraggableWindow({
     padding: '0 4px',
     cursor: isDragging ? 'grabbing' : 'grab',
     color: 'white',
-    fontSize: '11px'
+    fontSize: '11px',
   };
 
   const titleTextStyle: React.CSSProperties = {
@@ -239,12 +247,12 @@ function DraggableWindow({
     alignItems: 'center',
     gap: '4px',
     overflow: 'hidden',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
   };
 
   const titleButtonsStyle: React.CSSProperties = {
     display: 'flex',
-    gap: '2px'
+    gap: '2px',
   };
 
   const titleBtnStyle: React.CSSProperties = {
@@ -256,13 +264,13 @@ function DraggableWindow({
     cursor: 'pointer',
     padding: '0',
     color: 'black',
-    lineHeight: '1'
+    lineHeight: '1',
   };
 
   const contentStyle: React.CSSProperties = {
     flex: 1,
     overflow: 'hidden',
-    backgroundColor: window.type === 'dialog' ? '#F0F0F0' : '#C0C0C0'
+    backgroundColor: '#FFFFFF',
   };
 
   return (
@@ -275,44 +283,45 @@ function DraggableWindow({
         </div>
         <div style={titleButtonsStyle}>
           {window.minimizable && (
-            <button style={titleBtnStyle} onClick={onMinimize} title="Minimize">_</button>
-          )}
-          {window.maximizable && (
-            <button 
-              style={titleBtnStyle} 
-              onClick={onMaximize} 
-              title={window.isMaximized ? "Restore" : "Maximize"}
-            >
-              {window.isMaximized ? "❐" : "□"}
+            <button style={titleBtnStyle} onClick={onMinimize} title="Minimize">
+              _
             </button>
           )}
-          <button style={titleBtnStyle} onClick={onClose} title="Close">✕</button>
+          {window.maximizable && (
+            <button
+              style={titleBtnStyle}
+              onClick={onMaximize}
+              title={window.isMaximized ? 'Restore' : 'Maximize'}
+            >
+              {window.isMaximized ? '❐' : '□'}
+            </button>
+          )}
+          <button style={titleBtnStyle} onClick={onClose} title="Close">
+            ✕
+          </button>
         </div>
       </div>
 
       {/* Window Content */}
-      <div style={contentStyle}>
-        {children}
-      </div>
+      <div style={contentStyle}>{children}</div>
     </div>
   );
 }
 
 // Główny WindowManager
-export default function WindowManager({ 
-  windows, 
-  onWindowUpdate, 
-  onWindowClose, 
+export default function WindowManager({
+  windows,
+  onWindowUpdate,
+  onWindowClose,
   onWindowFocus,
-  children 
+  children,
 }: WindowManagerProps) {
-
   const handleMinimize = (windowId: string) => {
     onWindowUpdate(windowId, { isMinimized: true });
   };
 
   const handleMaximize = (windowId: string) => {
-    const windowState = windows.find(w => w.id === windowId);
+    const windowState = windows.find((w) => w.id === windowId);
     if (windowState && windowState.type !== 'fullscreen') {
       onWindowUpdate(windowId, { isMaximized: !windowState.isMaximized });
     }
@@ -320,7 +329,7 @@ export default function WindowManager({
 
   return (
     <>
-      {windows.map(windowState => (
+      {windows.map((windowState) => (
         <DraggableWindow
           key={windowState.id}
           window={windowState}
@@ -344,22 +353,22 @@ export const APP_CONFIGS: Record<string, WindowConfig> = {
     title: 'Winamp',
     icon: '🎵',
     type: 'windowed',
-    defaultSize: { width: 275, height: 116 },
+    defaultSize: { width: 275, height: 220 },
     defaultPosition: { x: 100, y: 100 },
     resizable: false,
     minimizable: true,
-    maximizable: false
+    maximizable: false,
   },
   winampPlaylist: {
     id: 'winampPlaylist',
-    title: 'Winamp Playlist Editor',
+    title: 'Winamp Playlist',
     icon: '📜',
     type: 'windowed',
-    defaultSize: { width: 275, height: 232 },
-    defaultPosition: { x: 380, y: 100 },
-    resizable: true,
+    defaultSize: { width: 275, height: 280 },
+    defaultPosition: { x: 390, y: 100 },
+    resizable: false,
     minimizable: true,
-    maximizable: true
+    maximizable: false,
   },
   gaduGadu: {
     id: 'gaduGadu',
@@ -370,7 +379,7 @@ export const APP_CONFIGS: Record<string, WindowConfig> = {
     defaultPosition: { x: 50, y: 50 },
     resizable: true,
     minimizable: true,
-    maximizable: true
+    maximizable: true,
   },
   counterStrike: {
     id: 'counterStrike',
@@ -381,7 +390,7 @@ export const APP_CONFIGS: Record<string, WindowConfig> = {
     defaultPosition: { x: 0, y: 0 },
     resizable: false,
     minimizable: false,
-    maximizable: false
+    maximizable: false,
   },
   tibia: {
     id: 'tibia',
@@ -392,7 +401,7 @@ export const APP_CONFIGS: Record<string, WindowConfig> = {
     defaultPosition: { x: 0, y: 0 },
     resizable: false,
     minimizable: false,
-    maximizable: false
+    maximizable: false,
   },
   internetExplorer: {
     id: 'internetExplorer',
@@ -403,7 +412,7 @@ export const APP_CONFIGS: Record<string, WindowConfig> = {
     defaultPosition: { x: 100, y: 100 },
     resizable: true,
     minimizable: true,
-    maximizable: true
+    maximizable: true,
   },
   gtaSanAndreas: {
     id: 'gtaSanAndreas',
@@ -414,6 +423,28 @@ export const APP_CONFIGS: Record<string, WindowConfig> = {
     defaultPosition: { x: 0, y: 0 },
     resizable: false,
     minimizable: false,
-    maximizable: false
-  }
+    maximizable: false,
+  },
+  aboutMe: {
+    id: 'aboutMe',
+    title: 'About_Me',
+    icon: '📁',
+    type: 'windowed',
+    defaultSize: { width: 800, height: 600 },
+    defaultPosition: { x: 100, y: 50 },
+    resizable: true,
+    minimizable: true,
+    maximizable: true,
+  },
+  projects: {
+    id: 'projects',
+    title: 'Projects',
+    icon: '📁',
+    type: 'windowed',
+    defaultSize: { width: 800, height: 600 },
+    defaultPosition: { x: 120, y: 70 },
+    resizable: true,
+    minimizable: true,
+    maximizable: true,
+  },
 };

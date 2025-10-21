@@ -3,10 +3,10 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import BootScreen from '@/components/boot/BootScreen';
 import WelcomeScreen from '@/components/boot/WelcomeScreen';
-import GlitchOverlay from '@/components/desktop/GlitchOverlay';
-import DesktopXP from '@/components/desktop/desktop';
-import Warning from '@/components/desktop/Warning';
-import Folders from '@/components/desktop/Folders';
+import GlitchOverlay from '@/components/DesktopXP/Glitch';
+import DesktopXP from '@/components/DesktopXP/Desktop';
+import Warning from '@/components/DesktopXP/Warning';
+import Folders from '@/components/DesktopXP/Folders';
 
 type AppPhase = 'boot' | 'welcome' | 'desktop' | 'glitch' | 'warning' | 'folders';
 
@@ -61,8 +61,8 @@ export default function Home() {
           audio.volume = 0.7;
 
           await new Promise((res, rej) => {
-            audio.addEventListener('canplaythrough', res, { once: true });
-            audio.addEventListener('error', rej, { once: true });
+            audio.addEventListener('canplaythrough', res as EventListener, { once: true });
+            audio.addEventListener('error', rej as EventListener, { once: true });
             audio.load();
           });
 
@@ -70,7 +70,7 @@ export default function Home() {
           audio.play().catch(() => {});
           break;
         } catch {
-          /* kolejny plik */
+          /* próbuj kolejny plik */
         }
       }
     })();
