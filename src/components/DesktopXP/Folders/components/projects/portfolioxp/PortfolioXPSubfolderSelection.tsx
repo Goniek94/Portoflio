@@ -43,29 +43,29 @@ export default function PortfolioXPSubfolderSelection({
           type="button"
           onClick={onClose}
           className="text-white/90 hover:text-white hover:bg-white/10 px-2 py-1 rounded transition"
-          title="Wróć"
-          aria-label="Wróć"
+          title="Back"
+          aria-label="Back"
         >
-          ← Wróć
+          ← Back
         </button>
       </header>
 
       <main className="p-6">
-        <h2 className="text-xl font-bold mb-6">Wybierz folder:</h2>
+        <h2 className="text-xl font-bold mb-6">Choose a folder:</h2>
 
         <div className="grid grid-cols-2 gap-6">
           <Tile
             onClick={handleOpen('description')}
             emoji="📝"
-            title="Opis projektu"
-            subtitle="Technologie i funkcje"
+            title="Project Description"
+            subtitle="Technologies and features"
             bgClass="bg-yellow-300"
           />
           <Tile
             onClick={handleOpen('repo')}
             emoji="💻"
-            title="Repozytorium"
-            subtitle="Link do kodu źródłowego"
+            title="Repository"
+            subtitle="Link to source code"
             bgClass="bg-green-300"
           />
         </div>
