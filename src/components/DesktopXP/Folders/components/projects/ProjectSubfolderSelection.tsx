@@ -14,17 +14,17 @@ export default function ProjectSubfolderSelection({
   return (
     <div className="bg-white text-black w-full max-w-2xl rounded shadow-lg overflow-hidden">
       <header className="bg-gradient-to-r from-blue-700 to-blue-500 text-white px-3 py-1 flex justify-between items-center">
-        <span>📁 Moje Projekty</span>
+        <span>📁 My Projects</span>
         <button
           onClick={onClose}
           className="text-white hover:bg-blue-600 px-2 rounded"
-          title="Wróć"
+          title="Back"
         >
-          ← Wróć
+          ← Back
         </button>
       </header>
       <main className="p-6">
-        <h2 className="text-xl font-bold mb-6">Wybierz projekt:</h2>
+        <h2 className="text-xl font-bold mb-6">Choose a project:</h2>
         <div className="grid grid-cols-2 gap-6">
           {/* Marketplace */}
           <div
@@ -35,7 +35,7 @@ export default function ProjectSubfolderSelection({
               🚗
             </div>
             <span className="text-sm text-center font-semibold">Marketplace</span>
-            <span className="text-xs text-gray-600 text-center mt-1">Platforma sprzedaży aut</span>
+            <span className="text-xs text-gray-600 text-center mt-1">Car marketplace platform</span>
           </div>
 
           {/* Portfolio XP */}
@@ -47,7 +47,7 @@ export default function ProjectSubfolderSelection({
               🪟
             </div>
             <span className="text-sm text-center font-semibold">Portfolio XP</span>
-            <span className="text-xs text-gray-600 text-center mt-1">Interaktywne portfolio</span>
+            <span className="text-xs text-gray-600 text-center mt-1">Interactive portfolio</span>
           </div>
         </div>
       </main>

@@ -12,7 +12,7 @@ export default function MarketplaceRepoInfo({ onClose }: MarketplaceRepoInfoProp
   const [activeTab, setActiveTab] = useState<TabType>('about');
 
   const handleOpenRepo = () => {
-    window.open('https://github.com/Goniek94/Portoflio.git', '_blank');
+    window.open('https://github.com/Goniek94/FullstackCodePortfolio', '_blank');
   };
 
   return (

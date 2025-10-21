@@ -12,7 +12,7 @@ interface NotepadWindowProps {
 }
 
 export default function NotepadWindow({ folderKey, onClose }: NotepadWindowProps) {
-  const fileName = folderKey === 'aboutMe' ? 'O_mnie.txt' : 'Projekty.txt';
+  const fileName = folderKey === 'aboutMe' ? 'About_Me.txt' : 'Projects.txt';
 
   return (
     <div className="w-full max-w-2xl rounded border-2 border-[#7a7a7a] shadow-xl bg-[#f6f6f6]">
@@ -35,12 +35,12 @@ export default function NotepadWindow({ folderKey, onClose }: NotepadWindowProps
 
       {/* Dolny pasek */}
       <div className="flex items-center justify-between text-[10px] px-3 py-1 bg-[#f3f3f3] border-t border-[#c3c3c3]">
-        <span>Wiersz 1, kolumna 1</span>
+        <span>Line 1, Col 1</span>
         <button
           onClick={onClose}
           className="bg-blue-700 text-white text-xs px-4 py-1 rounded hover:bg-blue-600 transition"
         >
-          Zamknij
+          Exit
         </button>
       </div>
     </div>
