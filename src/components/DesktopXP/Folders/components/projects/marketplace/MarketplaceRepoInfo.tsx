@@ -6,16 +6,13 @@ interface MarketplaceRepoInfoProps {
   onClose: () => void;
 }
 
+type TabType = 'about' | 'frontend' | 'backend' | 'tech';
+
 export default function MarketplaceRepoInfo({ onClose }: MarketplaceRepoInfoProps) {
-  const [activeTab, setActiveTab] = useState<'about' | 'frontend' | 'backend' | 'tech'>('about');
-  const [language, setLanguage] = useState<'pl' | 'en'>('pl');
+  const [activeTab, setActiveTab] = useState<TabType>('about');
 
   const handleOpenRepo = () => {
     window.open('https://github.com/Goniek94/Portoflio.git', '_blank');
-  };
-
-  const toggleLanguage = () => {
-    setLanguage((prev) => (prev === 'pl' ? 'en' : 'pl'));
   };
 
   return (
@@ -45,7 +42,7 @@ export default function MarketplaceRepoInfo({ onClose }: MarketplaceRepoInfoProp
         ].map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as TabType)}
             className={`px-4 py-2 text-xs font-bold rounded-t border-2 transition-all ${
               activeTab === tab.id
                 ? 'bg-white border-[#0a246a] text-[#0a246a] -mb-[2px] relative z-10'
@@ -164,172 +161,119 @@ export default function MarketplaceRepoInfo({ onClose }: MarketplaceRepoInfoProp
 
         {/* TAB: FRONTEND */}
         {activeTab === 'frontend' && (
-          <div className="space-y-3">
-            <h2 className="text-lg font-bold text-gray-800 border-b-2 border-blue-600 pb-2 mb-4">
-              🎨 Selected Fragments - Frontend (5)
-            </h2>
-
-            <div className="border-l-4 border-blue-500 bg-blue-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">🔍</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">SearchFormUpdated.js</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">Intelligent filter engine</p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    30+ form fields, custom hooks, URL synchronization, cascade dependencies
-                    (brand→model)
-                  </p>
-                </div>
-              </div>
+          <div className="space-y-6">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-l-4 border-blue-600 p-4 rounded-r">
+              <h2 className="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+                <span className="text-2xl">⚛️</span>
+                Frontend Architecture
+              </h2>
+              <p className="text-gray-700 text-sm">
+                Modern, performant React-based frontend with advanced state management.
+              </p>
             </div>
 
-            <div className="border-l-4 border-green-500 bg-green-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">📄</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">ListingDetails.js</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">Complete listing view</p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    Multi-stage data fetching, comment system with file upload, responsive layout
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-l-4 border-yellow-500 bg-yellow-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">⭐</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">FeaturedListings.js</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">
-                    Landing page with fallback strategy
-                  </p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    Smart data fetching, categorization (featured/hot/regular), graceful degradation
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-l-4 border-purple-500 bg-purple-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">📸</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">ImageGallery.js</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">
-                    Gallery with modal & keyboard navigation
-                  </p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    Fullscreen modal, thumbnails, loop navigation, ESC/arrows support
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-l-4 border-red-500 bg-red-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">🔔</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">NotificationContext.js</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">
-                    Real-time enterprise notifications
-                  </p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    Socket.IO client, event deduplication, multi-channel feedback (toast + sound +
-                    log)
-                  </p>
-                </div>
-              </div>
+            <div className="bg-blue-50 border border-blue-200 p-5 rounded-lg">
+              <h3 className="font-bold text-blue-900 mb-4 text-base flex items-center gap-2">
+                <span>🎨</span>
+                <span>Key Features</span>
+              </h3>
+              <ul className="space-y-2 text-xs text-gray-700">
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 font-bold">•</span>
+                  <span>
+                    <strong>React Hooks:</strong> Custom hooks for authentication, WebSocket,
+                    real-time notifications
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 font-bold">•</span>
+                  <span>
+                    <strong>Context API:</strong> Global state (AuthContext, WebSocketContext)
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 font-bold">•</span>
+                  <span>
+                    <strong>Lazy Loading:</strong> Dynamic imports for optimized bundle size
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 font-bold">•</span>
+                  <span>
+                    <strong>Tailwind CSS:</strong> Utility-first responsive design
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-600 font-bold">•</span>
+                  <span>
+                    <strong>PWA Ready:</strong> Service workers, offline support
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         )}
 
         {/* TAB: BACKEND */}
         {activeTab === 'backend' && (
-          <div className="space-y-3">
-            <h2 className="text-lg font-bold text-gray-800 border-b-2 border-orange-600 pb-2 mb-4">
-              ⚙️ Selected Fragments - Backend (5)
-            </h2>
-
-            <div className="border-l-4 border-red-500 bg-red-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">🛡️</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">Rate Limiting Middleware</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">Enterprise traffic control</p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    HMAC-hashed keys, masked logging, per-endpoint limits, DDoS mitigation,
-                    Retry-After headers
-                  </p>
-                </div>
-              </div>
+          <div className="space-y-6">
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-600 p-4 rounded-r">
+              <h2 className="text-xl font-bold text-gray-800 mb-2 flex items-center gap-2">
+                <span className="text-2xl">🖥️</span>
+                Backend & API
+              </h2>
+              <p className="text-gray-700 text-sm">
+                Scalable RESTful API with real-time WebSocket communication.
+              </p>
             </div>
 
-            <div className="border-l-4 border-blue-500 bg-blue-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">🔌</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">Socket.IO Infrastructure</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">
-                    Modular real-time architecture
-                  </p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    4 managers (connections/conversations/notifications/heartbeat), JWT auth, health
-                    monitoring
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-l-4 border-green-500 bg-green-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">🔍</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">Advanced Search Engine</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">Multi-stage ranking algorithm</p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    Smart scoring, 4-level sorting (priority→criteria→score→date), query
-                    optimization
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-l-4 border-purple-500 bg-purple-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">💬</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">Messaging System</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">Full-featured messenger</p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    File uploads (Supabase), folders (inbox/sent/starred), read receipts, push/email
-                    notifications
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-l-4 border-indigo-500 bg-indigo-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">🔐</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">Profile & Account Security</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">Comprehensive user management</p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    Two-factor auth (email/SMS codes), token-based password reset, enumeration
-                    protection, audit logging
-                  </p>
-                </div>
-              </div>
+            <div className="bg-green-50 border border-green-200 p-5 rounded-lg">
+              <h3 className="font-bold text-green-900 mb-4 text-base flex items-center gap-2">
+                <span>⚙️</span>
+                <span>Technical Highlights</span>
+              </h3>
+              <ul className="space-y-2 text-xs text-gray-700">
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 font-bold">•</span>
+                  <span>
+                    <strong>Express.js:</strong> RESTful API with MVC architecture
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 font-bold">•</span>
+                  <span>
+                    <strong>Socket.IO:</strong> Real-time bidirectional event-based communication
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 font-bold">•</span>
+                  <span>
+                    <strong>MongoDB:</strong> NoSQL database with Mongoose ODM
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 font-bold">•</span>
+                  <span>
+                    <strong>JWT:</strong> Secure token-based authentication
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 font-bold">•</span>
+                  <span>
+                    <strong>Middleware:</strong> Authentication, error handling, rate limiting
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         )}
 
         {/* TAB: TECH STACK */}
         {activeTab === 'tech' && (
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-gray-800 border-b-2 border-purple-600 pb-2 mb-4">
-              💻 Technology Stack
+          <div className="space-y-6">
+            <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+              <span className="text-2xl">💻</span>
+              Complete Technology Stack
             </h2>
 
             <div className="grid md:grid-cols-2 gap-4">
@@ -422,7 +366,7 @@ export default function MarketplaceRepoInfo({ onClose }: MarketplaceRepoInfoProp
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>
-                    <span>SSL/TLS Certificates (Let's Encrypt)</span>
+                    <span>SSL/TLS Certificates (Let&apos;s Encrypt)</span>
                   </li>
                   <li className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 bg-orange-500 rounded-full"></span>

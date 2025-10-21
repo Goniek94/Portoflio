@@ -24,7 +24,7 @@ const DEFAULT_ICONS: IconData[] = [
 
   { id: 5, label: 'Tibia', src: '/images/rpg-icon.png', x: 150, y: 32 },
   { id: 6, label: 'Winamp', src: '/images/winamp-icon.svg', x: 150, y: 140 }, // 👈 UŻYJ DOSTĘPNEJ IKONY
-  { id: 7, label: 'GTA: San Andreas', src: '/images/action-icon.png', x: 150, y: 248 },
+  { id: 7, label: 'GTA: San Andreas', src: '/images/Gtasaicon.jpg', x: 150, y: 240 },
   { id: 8, label: 'Need for Speed', src: '/images/racing-icon.png', x: 150, y: 356 },
   { id: 9, label: 'Icy Tower', src: '/images/icy-icon.png', x: 268, y: 32 },
 ];

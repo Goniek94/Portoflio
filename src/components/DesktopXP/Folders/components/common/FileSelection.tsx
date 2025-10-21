@@ -52,7 +52,7 @@ export default function FileSelection({ viewed, onOpen, allDone, onFinish }: Fil
               <p className="text-gray-700 leading-relaxed">
                 Feel free to explore other desktop icons like <strong>Winamp</strong>,{' '}
                 <strong>Gadu-Gadu</strong>, and more! I plan to complete the portfolio in the
-                future, but I'm currently <strong>actively seeking employment</strong>.
+                future, but I&apos;m currently <strong>actively seeking employment</strong>.
               </p>
               <p className="text-gray-700 mt-2">
                 You can also review <strong>Projects</strong> and <strong>About Me</strong> again

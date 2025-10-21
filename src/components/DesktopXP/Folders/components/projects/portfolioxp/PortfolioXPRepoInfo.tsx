@@ -6,8 +6,10 @@ interface PortfolioXPRepoInfoProps {
   onClose: () => void;
 }
 
+type TabType = 'about' | 'components' | 'features' | 'tech';
+
 export default function PortfolioXPRepoInfo({ onClose }: PortfolioXPRepoInfoProps) {
-  const [activeTab, setActiveTab] = useState<'about' | 'components' | 'features' | 'tech'>('about');
+  const [activeTab, setActiveTab] = useState<TabType>('about');
 
   const handleOpenRepo = () => {
     window.open('https://github.com/Goniek94/Portoflio.git', '_blank');
@@ -40,7 +42,7 @@ export default function PortfolioXPRepoInfo({ onClose }: PortfolioXPRepoInfoProp
         ].map((tab) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id as any)}
+            onClick={() => setActiveTab(tab.id as TabType)}
             className={`px-6 py-3 text-sm font-bold rounded-t border-2 transition-all ${
               activeTab === tab.id
                 ? 'bg-white border-[#0a246a] text-[#0a246a] -mb-[2px] relative z-10'
@@ -165,14 +167,13 @@ export default function PortfolioXPRepoInfo({ onClose }: PortfolioXPRepoInfoProp
               <div className="flex items-start gap-2">
                 <span className="text-2xl">🖥️</span>
                 <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">Desktop System</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">
-                    Main component managing application state
-                  </p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    useDesktopState hook, context menu, icon grid system, wallpaper management,
-                    debug mode
-                  </p>
+                  <h3 className="font-bold text-blue-800 mb-2 text-sm">Desktop System</h3>
+                  <ul className="space-y-1 text-xs text-gray-700">
+                    <li>• Grid-based icon positioning</li>
+                    <li>• Right-click context menu</li>
+                    <li>• Dynamic wallpaper support</li>
+                    <li>• Icon selection & focus states</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -181,75 +182,44 @@ export default function PortfolioXPRepoInfo({ onClose }: PortfolioXPRepoInfoProp
               <div className="flex items-start gap-2">
                 <span className="text-2xl">🪟</span>
                 <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">Window Manager</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">
-                    Window management system with drag & drop
-                  </p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    Draggable windows, minimize/maximize/close, z-index orchestration, window
-                    stacking, focus management
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-l-4 border-yellow-500 bg-yellow-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">📊</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">Taskbar & Start Menu</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">
-                    Interactive taskbar with animations
-                  </p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    Start button animation, menu flyout, quick launch icons, window buttons, system
-                    tray, live clock
-                  </p>
+                  <h3 className="font-bold text-green-800 mb-2 text-sm">Window Manager</h3>
+                  <ul className="space-y-1 text-xs text-gray-700">
+                    <li>• Draggable windows with custom hook</li>
+                    <li>• Minimize/Maximize/Close controls</li>
+                    <li>• Z-index state management</li>
+                    <li>• Window resize functionality</li>
+                    <li>• Taskbar integration</li>
+                  </ul>
                 </div>
               </div>
             </div>
 
             <div className="border-l-4 border-purple-500 bg-purple-50 p-3 rounded-r">
               <div className="flex items-start gap-2">
+                <span className="text-2xl">📊</span>
+                <div className="flex-1">
+                  <h3 className="font-bold text-purple-800 mb-2 text-sm">Taskbar & Start Menu</h3>
+                  <ul className="space-y-1 text-xs text-gray-700">
+                    <li>• XP-style Start button with animation</li>
+                    <li>• Active window indicators</li>
+                    <li>• System tray with clock</li>
+                    <li>• Quick launch area</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-l-4 border-orange-500 bg-orange-50 p-3 rounded-r">
+              <div className="flex items-start gap-2">
                 <span className="text-2xl">🎵</span>
                 <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">Winamp Player</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">
-                    Pixel-perfect player recreation
-                  </p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    Animated equalizer, playlist management, classic Winamp skin, visualizer effects
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-l-4 border-red-500 bg-red-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">💫</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">Glitch System</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">6 types of visual effects</p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    Matrix rain, RGB split, scanlines, pixelation, static noise, horizontal bars -
-                    all with timing and skip option
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-l-4 border-indigo-500 bg-indigo-50 p-3 rounded-r">
-              <div className="flex items-start gap-2">
-                <span className="text-2xl">🚀</span>
-                <div className="flex-1">
-                  <h3 className="font-bold text-gray-800 text-sm">Boot Sequence</h3>
-                  <p className="text-xs text-gray-600 italic mb-1">
-                    Authentic XP startup animations
-                  </p>
-                  <p className="text-xs text-gray-700 leading-relaxed">
-                    BIOS screen, Windows loading animation, welcome screen, progressive reveal with
-                    audio
-                  </p>
+                  <h3 className="font-bold text-orange-800 mb-2 text-sm">Interactive Apps</h3>
+                  <ul className="space-y-1 text-xs text-gray-700">
+                    <li>• Winamp music player (skin-accurate)</li>
+                    <li>• Gadu-Gadu messenger interface</li>
+                    <li>• Notepad text editor</li>
+                    <li>• Custom folder structures</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -258,46 +228,33 @@ export default function PortfolioXPRepoInfo({ onClose }: PortfolioXPRepoInfoProp
 
         {/* TAB: FEATURES */}
         {activeTab === 'features' && (
-          <div className="space-y-4">
+          <div className="space-y-3">
             <h2 className="text-lg font-bold text-gray-800 border-b-2 border-green-600 pb-2 mb-4">
-              ✨ Advanced Features
+              ✨ Technical Features
             </h2>
 
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-3">
               <div className="border border-blue-200 bg-blue-50 p-4 rounded-lg">
                 <h3 className="font-bold text-blue-800 mb-2 text-sm flex items-center gap-2">
-                  <span>🎯</span>
-                  <span>State Management</span>
+                  <span>🎨</span>
+                  <span>UI/UX</span>
                 </h3>
                 <ul className="space-y-1.5 text-xs text-gray-700">
-                  <li>• Custom hooks (useDesktopState, useGlitchTimer)</li>
-                  <li>• Global state for windows and applications</li>
-                  <li>• Persistent state (localStorage)</li>
-                  <li>• Optimized re-renders with useCallback</li>
+                  <li>• Pixel-perfect Windows XP recreation</li>
+                  <li>• Authentic system fonts & colors</li>
+                  <li>• Smooth CSS animations</li>
+                  <li>• Interactive hover states</li>
                 </ul>
               </div>
 
               <div className="border border-green-200 bg-green-50 p-4 rounded-lg">
                 <h3 className="font-bold text-green-800 mb-2 text-sm flex items-center gap-2">
-                  <span>🎨</span>
-                  <span>UI/UX Features</span>
-                </h3>
-                <ul className="space-y-1.5 text-xs text-gray-700">
-                  <li>• Smooth drag & drop with constraints</li>
-                  <li>• Window stacking with z-index management</li>
-                  <li>• Custom scrollbars in XP style</li>
-                  <li>• Hover effects and transitions</li>
-                </ul>
-              </div>
-
-              <div className="border border-purple-200 bg-purple-50 p-4 rounded-lg">
-                <h3 className="font-bold text-purple-800 mb-2 text-sm flex items-center gap-2">
                   <span>⚡</span>
                   <span>Performance</span>
                 </h3>
                 <ul className="space-y-1.5 text-xs text-gray-700">
-                  <li>• Next.js 14 App Router for SSR</li>
-                  <li>• Component lazy loading</li>
+                  <li>• Optimized re-renders with React.memo</li>
+                  <li>• Lazy loading for heavy components</li>
                   <li>• Optimized animations (CSS transforms)</li>
                   <li>• Debounced event handlers</li>
                 </ul>

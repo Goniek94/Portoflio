@@ -190,6 +190,22 @@ function DraggableWindow({
     };
   }, [isDragging, dragOffset, window, onUpdate]);
 
+  // ESC key handler dla fullscreen apps
+  useEffect(() => {
+    if (window.type === 'fullscreen' && window.isVisible) {
+      const handleEscKey = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onClose();
+        }
+      };
+
+      document.addEventListener('keydown', handleEscKey);
+      return () => {
+        document.removeEventListener('keydown', handleEscKey);
+      };
+    }
+  }, [window.type, window.isVisible, onClose]);
+
   // Fullscreen apps nie pokazują window frame
   if (window.type === 'fullscreen') {
     const fullscreenStyle: React.CSSProperties = {
@@ -203,8 +219,23 @@ function DraggableWindow({
       overflow: 'hidden',
     };
 
+    const escHintStyle: React.CSSProperties = {
+      position: 'absolute',
+      top: '10px',
+      right: '10px',
+      color: 'rgba(255, 255, 255, 0.7)',
+      fontSize: '12px',
+      fontFamily: 'Tahoma, Arial, sans-serif',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      padding: '6px 12px',
+      borderRadius: '4px',
+      zIndex: 9999,
+      pointerEvents: 'none',
+    };
+
     return (
       <div style={fullscreenStyle} onClick={onFocus}>
+        <div style={escHintStyle}>Press ESC to exit</div>
         {children}
       </div>
     );
