@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 type IconData = {
   id: number;
@@ -19,11 +20,11 @@ interface DesktopIconsProps {
 const DEFAULT_ICONS: IconData[] = [
   { id: 1, label: 'Gadu-Gadu', src: '/images/chat-icon.png', x: 32, y: 32 },
   { id: 2, label: 'Counter-Strike 1.6', src: '/images/game-icon.png', x: 32, y: 140 },
-  { id: 3, label: 'Internet Explorer', src: '/images/winamp-icon.svg', x: 32, y: 248 }, // 👈 UŻYJ DOSTĘPNEJ IKONY
+  { id: 3, label: 'Internet Explorer', src: '/images/winamp-icon.svg', x: 32, y: 248 },
   { id: 4, label: 'Kosz', src: '/images/trash-icon.png', x: 32, y: 356 },
 
   { id: 5, label: 'Tibia', src: '/images/rpg-icon.png', x: 150, y: 32 },
-  { id: 6, label: 'Winamp', src: '/images/winamp-icon.svg', x: 150, y: 140 }, // 👈 UŻYJ DOSTĘPNEJ IKONY
+  { id: 6, label: 'Winamp', src: '/images/winamp-icon.svg', x: 150, y: 140 },
   { id: 7, label: 'GTA: San Andreas', src: '/images/Gtasaicon.jpg', x: 150, y: 240 },
   { id: 8, label: 'Need for Speed', src: '/images/racing-icon.png', x: 150, y: 356 },
   { id: 9, label: 'Icy Tower', src: '/images/icy-icon.png', x: 268, y: 32 },
@@ -81,13 +82,12 @@ export default function DesktopIcons({
 
   /* ----------  DOUBLE CLICK  ---------- */
   function handleIconDoubleClick(icon: IconData) {
-    // Wywołaj zewnętrzny callback - desktop.tsx obsługuje otwieranie aplikacji
     if (onIconDoubleClick) {
       onIconDoubleClick(icon);
     }
   }
 
-  /* ----------  EMOJI MAPPER Z FALLBACKIEM ---------- */
+  /* ----------  EMOJI FALLBACK  ---------- */
   function getIconEmoji(label: string): string {
     if (label.includes('About') || label.includes('mnie')) return '👤';
     if (label.includes('Project') || label.includes('Projekt')) return '📁';
@@ -127,23 +127,36 @@ export default function DesktopIcons({
             e.currentTarget.style.border = '1px solid transparent';
           }}
         >
-          {/* Icon - używamy emoji zamiast PNG */}
+          {/* Icon - używamy prawdziwego obrazka */}
           <div
             style={{
               width: 32,
               height: 32,
               margin: '0 auto 2px',
-              backgroundColor: 'transparent',
-              border: 'none',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 32,
-              borderRadius: '2px',
-              filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.3))',
+              position: 'relative',
             }}
           >
-            {getIconEmoji(icon.label)}
+            <Image
+              src={icon.src}
+              alt={icon.label}
+              width={32}
+              height={32}
+              style={{
+                objectFit: 'contain',
+                filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.5))',
+              }}
+              onError={(e) => {
+                // Fallback na emoji jak obrazek się nie załaduje
+                e.currentTarget.style.display = 'none';
+                const parent = e.currentTarget.parentElement;
+                if (parent) {
+                  parent.innerHTML = `<span style="font-size: 32px;">${getIconEmoji(icon.label)}</span>`;
+                }
+              }}
+            />
           </div>
 
           {/* Icon label */}
